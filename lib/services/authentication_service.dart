@@ -90,13 +90,13 @@ class AuthenticationService {
   }
 
   Future<bool> isUserLoggedIn() async {
-    var user =  FirebaseAuth.instance.currentUser;
+    var user =  await FirebaseAuth.instance.currentUser;
     if (user != null) {
-      ConsoleUtility.printToConsole('isUserLoggedIn returned ${user==null}');
       await setAuthenticatedUser(user.uid);
+      ConsoleUtility.printToConsole('ALREADY logged in user detected.\n returning ${user==null}');
       return true;
-    }
-    ConsoleUtility.printToConsole('isUserLoggedIn returned ${user!=null}');
+          }
+    ConsoleUtility.printToConsole('NO already logged in user detected.\n returning ${user!=null}');
     return false;
   }
 

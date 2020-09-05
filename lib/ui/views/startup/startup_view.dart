@@ -1,3 +1,5 @@
+import '../welcome/welcome_view.dart';
+// import 'package:AuthenticatedBiolerPlate/ui/views/welcome/welcome_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,23 +17,11 @@ class StartupView extends StatelessWidget {
     return ViewModelBuilder<StartupViewModel>.reactive(
       viewModelBuilder: () => StartupViewModel(),
       onModelReady: (model) => model.resolveStartupLogin(),
-      builder: (context, model, child) => BusyOverlayBuilder(
+      builder: (context, model, child) => 
+      BusyOverlayBuilder(
         title: 'Loading',
         busyValue: model.isBusy,
-        childWhenIdle: SafeArea(
-                  child: Scaffold(
-            backgroundColor: Colors.white,
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/icons/chat.svg'),
-                  LoadingSpinner(),
-                ],
-              ),
-            ),
-          ),
-        ),
+        childWhenIdle: WelcomeView(),
       ),
     );
   }

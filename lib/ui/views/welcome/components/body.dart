@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/rounded_button.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/login/login_view.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/signup/signup_view.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/welcome/components/background.dart';
-import 'package:AuthenticatedBoilerplate/app/constants.dart' as constants;
+import '../../../shared/rounded_button.dart';
+import '../../login/login_view.dart';
+import '../../signup/signup_view.dart';
+import '../../welcome/components/background.dart';
+import '../../../../app/constants.dart' as constants;
 
 class Body extends StatelessWidget {
   @override
@@ -19,11 +19,13 @@ class Body extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top:16.0),
               child: Text(
-                "WELCOME TO ",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor),
-              ),
+          "B2B Express",
+          style: TextStyle(
+            // fontSize: getProportionateScreenWidth(36),
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
             ),
             Padding(
               padding: const EdgeInsets.only(top:4.0),
@@ -53,11 +55,11 @@ class Body extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: size.height * 0.04),
-            SvgPicture.asset(
-              "assets/icons/chat.svg",
-              height: size.height * 0.30,
-            ),
+            // SizedBox(height: size.height * 0.04),
+            // SvgPicture.asset(
+            //   "assets/icons/chat.svg",
+            //   height: size.height * 0.30,
+            // ),
             SizedBox(height: size.height * 0.04),
             RoundedButton(
               color: constants.appPrimaryColor,

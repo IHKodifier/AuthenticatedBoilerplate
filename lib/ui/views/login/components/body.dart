@@ -1,69 +1,65 @@
+import 'package:AuthenticatedBoilerplate/app/size_config.dart';
+import 'package:AuthenticatedBoilerplate/ui/shared/social_card.dart';
+import 'package:AuthenticatedBoilerplate/ui/views/login/components/login_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/rounded_button.dart';
-// import 'package:AuthenticatedBoilerplate/app/rounded_input_field.dart' as inputField;
-import 'package:AuthenticatedBoilerplate/ui/shared/rounded_input_field.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/rounded_password_field.dart';
-import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
-import 'package:AuthenticatedBoilerplate/services/authentication_service.dart';
-import 'package:AuthenticatedBoilerplate/services/navigation_service.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/login/already_have_an_account.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/login/components/background.dart';
-// import 'package:flutter/material.dart';
+// import 'package:shop_app/components/no_account_text.dart';
+// import 'package:shop_app/components/social_card.dart';
+// import 'package:shop_app/screens/forgot_password/forgot_password_screen.dart';
+
+import '../../../../app/constants.dart';
+import '../../../../app/size_config.dart';
+import '../components/login_form.dart';
 
 class Body extends StatelessWidget {
-   Body({
-    Key key,
-  }) : super(key: key);
-  final AuthenticationService authenticationService =
-      serviceLocator<AuthenticationService>();
-  final NavigationService navigationService =
-      serviceLocator<NavigationService>();
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Background(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "LOGIN",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/login.svg",
-              height: size.height * 0.35,
-            ),
-            SizedBox(height: size.height * 0.03),
-            RoundedInputField(
-              hintText: "Your Email",
-              onChanged: (value) {},
-            ),
-            RoundedPasswordField(
-              onChanged: (value) {},
-            ),
-            RoundedButton(
-              color: Theme.of(context).primaryColor,
-              text: "LOGIN",
-              press: () {},
-            ),
-            SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      // return SignUpScreen();
-                    },
+    return SafeArea(
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding:
+              EdgeInsets.symmetric(horizontal: 24),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+                Text(
+                  "Welcome Back",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
                   ),
-                );
-              },
+                ),
+                Text(
+                  "Sign in with your email and password  \nor continue with social media",
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                LoginForm(),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SocialCard(
+                      icon: "assets/icons/google-icon.svg",
+                      press: () {},
+                    ),
+                    SocialCard(
+                      icon: "assets/icons/facebook-2.svg",
+                      press: () {},
+                    ),
+                    SocialCard(
+                      icon: "assets/icons/twitter.svg",
+                      press: () {},
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                // NoAccountText(,
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

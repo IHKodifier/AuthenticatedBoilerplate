@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:AuthenticatedBoilerplate/ui/views/Login/login_view.dart';
 import 'package:AuthenticatedBoilerplate/ui/views/Signup/components/background.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/Signup/components/or_divider.dart';
+import '../../../shared/or_divider.dart';
 import 'package:AuthenticatedBoilerplate/ui/views/Signup/components/social_icon.dart';
 import 'package:AuthenticatedBoilerplate/ui/views/login/already_have_an_account.dart';
 import 'package:AuthenticatedBoilerplate/ui/shared/rounded_button.dart';
@@ -23,10 +23,10 @@ class Body extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/signup.svg",
-              height: size.height * 0.35,
-            ),
+            // SvgPicture.asset(
+            //   "assets/icons/signup.svg",
+            //   height: size.height * 0.35,
+            // ),
             RoundedInputField(
               hintText: "Your Email",
               onChanged: (value) {},
@@ -56,18 +56,18 @@ class Body extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SocialIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocialIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocialIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
+                // SocialIcon(
+                //   iconSrc: "assets/icons/facebook.svg",
+                //   press: () {},
+                // ),
+                // SocialIcon(
+                //   iconSrc: "assets/icons/twitter.svg",
+                //   press: () {},
+                // ),
+                // SocialIcon(
+                //   iconSrc: "assets/icons/google-plus.svg",
+                //   press: () {},
+                // ),
               ],
             )
           ],

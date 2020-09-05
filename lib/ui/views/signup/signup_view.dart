@@ -8,11 +8,12 @@ import '../../shared/busy_overlayBuilder.dart';
 
 import '../../shared/ui_helpers.dart';
 import '../../shared/or_divider.dart';
-import './components/social_icon.dart';
+// import './components/social_icon.dart';
 import './signup_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import '../../shared/rounded_password_field.dart';
 import '../../shared/goBack.dart';
+import '../../shared/social_card.dart';
 
 class SignupView extends StatelessWidget {
   TextEditingController _emailController = TextEditingController();
@@ -57,19 +58,19 @@ class SignupView extends StatelessWidget {
                           height: size.height * 0.18,
                         ),
                         SizedBox(height: 20.0),
-                        _buildSocialIcons(),
+                        // _socialIcons(),
                         OrDivider(),
-                        _buildEmailTextField(context),
-                        _buildPasswordTextField(context),
-                        _buildFullNameTextField(context),
-                        _buildToggleButtonsContainer(context, model),
+                        _emailTextField(context),
+                        _passwordTextField(context),
+                        _fullNameTextField(context),
+                        _toggleButtons(context, model),
                         // verticalSpaceSmall,
-                        _buildProfileTitleTextField(context),
+                        _rofileTitleTextField(context),
                         verticalSpaceSmall,
-                        _buildDisclaimer(context),
+                        _disclaimer(context),
                         verticalSpaceSmall,
-                        _buildSignUpButton(context, model),
-                        _buildGoBackButton(context, model),
+                        _signUpButton(context, model),
+                        _goBackButton(context, model),
                       ],
                     )),
               ],
@@ -80,33 +81,33 @@ class SignupView extends StatelessWidget {
     );
   }
 
-  Row _buildSocialIcons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        SocialIcon(
-          iconSrc: "assets/icons/google-plus.svg",
-          press: () {},
-        ),
-        SocialIcon(
-          iconSrc: "assets/icons/facebook.svg",
-          press: () {},
-        ),
-        SocialIcon(
-          iconSrc: "assets/icons/twitter.svg",
-          press: () {},
-        ),
-      ],
-    );
-  }
+  // Row _socialIcons() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: <Widget>[
+  //       SocialIcon(
+  //         iconSrc: "assets/icons/google-plus.svg",
+  //         press: () {},
+  //       ),
+  //       SocialIcon(
+  //         iconSrc: "assets/icons/facebook.svg",
+  //         press: () {},
+  //       ),
+  //       SocialIcon(
+  //         iconSrc: "assets/icons/twitter.svg",
+  //         press: () {},
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  GoBackButton _buildGoBackButton(BuildContext context, SignupViewModel model) {
+  GoBackButton _goBackButton(BuildContext context, SignupViewModel model) {
     return GoBackButton(onPress: () {
       model.goBack();
     });
   }
 
-  Container _buildSignUpButton(BuildContext context, SignupViewModel model) {
+  Container _signUpButton(BuildContext context, SignupViewModel model) {
     return Container(
       height: 80.0,
       child: RoundedButton(
@@ -129,34 +130,34 @@ class SignupView extends StatelessWidget {
     );
   }
 
-  RoundedInputField _buildProfileTitleTextField(BuildContext context) {
+  RoundedInputField _rofileTitleTextField(BuildContext context) {
     return RoundedInputField(
       textEditingController: _profileTitleController,
       hintText: 'Choose a Profile Title',
     );
   }
 
-  RoundedPasswordField _buildPasswordTextField(BuildContext context) {
+  RoundedPasswordField _passwordTextField(BuildContext context) {
     return RoundedPasswordField(
       textEditingController: _passwordController,
     );
   }
 
-  RoundedInputField _buildEmailTextField(BuildContext context) {
+  RoundedInputField _emailTextField(BuildContext context) {
     return RoundedInputField(
       textEditingController: _emailController,
       hintText: 'Email',
     );
   }
 
-  RoundedInputField _buildFullNameTextField(BuildContext context) {
+  RoundedInputField _fullNameTextField(BuildContext context) {
     return RoundedInputField(
       textEditingController: _fullNameController,
       hintText: 'Full Name',
     );
   }
 
-  Widget _buildToggleButtonsContainer(
+  Widget _toggleButtons(
       BuildContext context, SignupViewModel model) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -264,7 +265,7 @@ class SignupView extends StatelessWidget {
     );
   }
 
-  _buildDisclaimer(BuildContext context) {
+  _disclaimer(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Text(
