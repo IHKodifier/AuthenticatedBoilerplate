@@ -67,9 +67,9 @@ class _WelcomeViewState extends State<WelcomeView> {
                         text: "Continue",
                         press: () {
                           Navigator.pushNamed(context, routes.LoginRoute);
-                          ConsoleUtility.printToConsole('click not working');
+                          ConsoleUtility.printToConsole('Continue button clicked by user');
 
-                          //TODO: Navigator.pushNamed(context, SignInScreen.routeName);
+                          
                         },
                       ),
                       Spacer(),

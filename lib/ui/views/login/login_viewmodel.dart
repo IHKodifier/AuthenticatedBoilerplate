@@ -63,9 +63,5 @@ class LoginViewModel extends BaseModel {
     _navigationService.navigateTo(routes.SignUPViewRoute);
   }
 
-  //sets the global [currentUserProfile] in [AuthenticationService]
-  // Future setGlobalAuthenticatedUser(String uid) async {
-  //   await _authenticationService.setAuthenticatedUser(uid);
-  //   notifyListeners();
-  // }
+  
 }

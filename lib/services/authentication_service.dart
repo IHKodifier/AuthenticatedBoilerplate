@@ -34,7 +34,7 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-    }     catch (e) {
+    } catch (e) {
       await _dialogService.showDialog(
         title: 'Login Failure',
         description: e.toString(),
@@ -69,16 +69,15 @@ class AuthenticationService {
   }
 
   Future<DocumentSnapshot> getUserProfile(String uid) async {
-    return Firestore.instance
-        .collection('/userProfiles').document(uid).get();
-        // .where('uid', isEqualTo: uid)
-        // .getDocuments();
+    return Firestore.instance.collection('/userProfiles').document(uid).get();
+    // .where('uid', isEqualTo: uid)
+    // .getDocuments();
   }
 
   setAuthenticatedUser(String uid) async {
     try {
       var returnvalue = await getUserProfile(uid);
-      if (returnvalue.data!=null) {
+      if (returnvalue.data != null) {
         currentUserProfile = returnvalue.data;
         ConsoleUtility.printToConsole(currentUserProfile.toString());
         var roles = getAllRolesForUser();
@@ -94,13 +93,15 @@ class AuthenticationService {
   }
 
   Future<bool> isUserLoggedIn() async {
-    var user =  await FirebaseAuth.instance.currentUser;
+    var user = await FirebaseAuth.instance.currentUser;
     if (user != null) {
       await setAuthenticatedUser(user.uid);
-      ConsoleUtility.printToConsole('ALREADY logged in user detected.\n returning ${user==null}');
+      ConsoleUtility.printToConsole(
+          'ALREADY logged in user detected.\n returning ${user == null}');
       return true;
-          }
-    ConsoleUtility.printToConsole('NO already logged in user detected.\n returning ${user!=null}');
+    }
+    ConsoleUtility.printToConsole(
+        'NO already logged in user detected.\n returning ${user != null}');
     return false;
   }
 
@@ -157,7 +158,23 @@ class AuthenticationService {
     userProfileData['photoUrl'] = 'http://i.pravatar.cc/300';
   }
 
-  Future<User> getCurrentUserProfile()  async{
+  Future<User> getCurrentUserProfile() async {
     return _firebaseAuthInstance.currentUser;
+  }
+
+  Future signInWithGoogle() {
+    ConsoleUtility.printToConsole('Attempting Google Sign in ');
+  }
+
+  Future signInWithTwitter() {
+    ConsoleUtility.printToConsole('Attempting Twitter Sign in ');
+  }
+
+  Future signInWithFacebook() {
+    ConsoleUtility.printToConsole('Attempting Facebook Sign in ');
+  }
+
+  Future signInWithPhoneNumber() {
+    ConsoleUtility.printToConsole('Attempting PhoneNumber Sign in ');
   }
 }
