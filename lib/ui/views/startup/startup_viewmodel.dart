@@ -1,19 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:AuthenticatedBoilerplate/app/route_paths.dart';
-import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
-// import 'package:AuthenticatedBoilerplate/models/app_user.dart';
-import 'package:AuthenticatedBoilerplate/services/authentication_service.dart';
-import 'package:AuthenticatedBoilerplate/services/console_utility.dart';
-import 'package:AuthenticatedBoilerplate/services/dialog_service.dart';
-import 'package:AuthenticatedBoilerplate/services/navigation_service.dart';
-//import 'package:AuthenticatedBoilerplate/ui/views/home/buyer_home_view.dart';
-// import 'package:AuthenticatedBoilerplate/ui/views/home/home_view.dart';
-// import 'package:AuthenticatedBoilerplate/ui/views/home/seller_home_view.dart';
-// import 'package:AuthenticatedBoilerplate/ui/views/login/login_view.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/welcome/welcome_view.dart';
+import '../../../app/service_locator.dart';
+import '../../../app/route_paths.dart';
+import '../../../services/authentication_service.dart';
+import '../../../services/console_utility.dart';
+import '../../../services/dialog_service.dart';
+import '../../../services/navigation_service.dart';
 import 'package:stacked/stacked.dart';
-import 'package:AuthenticatedBoilerplate/app/route_paths.dart' as routes;
+import '../welcome/welcome_view.dart';
+import 'package:stacked/stacked.dart';
+import '../../../app/route_paths.dart' as routes;
 
 class StartupViewModel extends BaseViewModel {
   AuthenticationService _authenticationService = serviceLocator<AuthenticationService>();

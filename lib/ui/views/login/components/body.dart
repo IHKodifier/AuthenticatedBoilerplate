@@ -1,13 +1,8 @@
-import 'package:AuthenticatedBoilerplate/app/size_config.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/social_card.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/login/components/login_form.dart';
-import 'package:flutter/material.dart';
-// import 'package:shop_app/components/no_account_text.dart';
-// import 'package:shop_app/components/social_card.dart';
-// import 'package:shop_app/screens/forgot_password/forgot_password_screen.dart';
-
-import '../../../../app/constants.dart';
 import '../../../../app/size_config.dart';
+import '../../../shared/social_card.dart';
+import '../../../views/login/components/login_form.dart';
+import 'package:flutter/material.dart';
+import '../../../../app/constants.dart';
 import '../components/login_form.dart';
 
 class Body extends StatelessWidget {
@@ -17,8 +12,7 @@ class Body extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: SingleChildScrollView(
             child: Column(
               children: [

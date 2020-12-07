@@ -1,7 +1,7 @@
-import 'package:AuthenticatedBoilerplate/app/constants.dart';
-import 'package:AuthenticatedBoilerplate/services/form_error.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/custom_surfix_icon.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/default_button.dart';
+import '../../../../app/constants.dart';
+import '../../../../services/form_error.dart';
+import '../../../shared/custom_surfix_icon.dart';
+import '../../../shared/default_button.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/route_paths.dart' as routes;
 

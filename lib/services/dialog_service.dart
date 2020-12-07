@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:AuthenticatedBoilerplate/models/dialog_models.dart';
+import '../models/dialog_models.dart';
 
 class DialogService {
   Function(AlertRequest) _showDialogListener;

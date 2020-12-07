@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/loding_spinner.dart';
+import '../../ui/shared/loding_spinner.dart';
 
 /// A modal overlay that will show over your child widget (fullscreen) when the [busyValue] is true
 ///

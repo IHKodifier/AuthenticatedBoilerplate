@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/rounded_button.dart';
-import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
-import 'package:AuthenticatedBoilerplate/app/route_paths.dart' as routes;
-import 'package:AuthenticatedBoilerplate/services/navigation_service.dart';
+import '../../shared/rounded_button.dart';
+import '../../../app/service_locator.dart';
+import '../../../app/route_paths.dart' as routes;
+import '../../../services/navigation_service.dart';
 
 class NewAccountSuccess extends StatelessWidget {
   final NavigationService navigationService =
@@ -24,7 +24,7 @@ class NewAccountSuccess extends StatelessWidget {
                   // _buildOkIcon(context),
                   // SizedBox(height: 12.0),
                   _buildProfileInvite(context),
-                 
+
                   SizedBox(
                     height: 100,
                   ),
@@ -57,8 +57,8 @@ class NewAccountSuccess extends StatelessWidget {
 
   Widget _buildCongrats(BuildContext context) {
     return Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       // spacing: 555,
       children: [
         _buildOkIcon(context),
@@ -71,12 +71,11 @@ class NewAccountSuccess extends StatelessWidget {
               ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric( horizontal:36.0, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 36.0, vertical: 16),
           child: Text(
             'ّYou have successfully created an account',
             style: Theme.of(context).textTheme.headline6.copyWith(
-                fontSize: 22.0, 
-                color: Theme.of(context).primaryColor),
+                fontSize: 22.0, color: Theme.of(context).primaryColor),
           ),
         ),
       ],
@@ -88,9 +87,11 @@ class NewAccountSuccess extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal:36,vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
           child: Text(
-              'Its a good time to build your  Business Profile.  a good Business Profile helps your business grow ', style: Theme.of(context).textTheme.subtitle2.copyWith(color:Theme.of(context).primaryColor,fontSize: 16)),
+              'Its a good time to build your  Business Profile.  a good Business Profile helps your business grow ',
+              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                  color: Theme.of(context).primaryColor, fontSize: 16)),
         ),
         SizedBox(height: 20),
         RoundedButton(
@@ -101,10 +102,11 @@ class NewAccountSuccess extends StatelessWidget {
             // navigationService.navigateTo(routes.)
           },
         ),
-        
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Text('You can also do it later.',style: Theme.of(context).textTheme.subtitle2.copyWith(color:Theme.of(context).primaryColor,fontSize: 18)),
+          child: Text('You can also do it later.',
+              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                  color: Theme.of(context).primaryColor, fontSize: 18)),
         ),
         RoundedButton(
           color: Theme.of(context).primaryColor,

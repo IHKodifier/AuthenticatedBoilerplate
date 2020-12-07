@@ -1,14 +1,18 @@
+import 'package:AuthenticatedBoilerPlate/app/service_locator.dart';
+import 'package:AuthenticatedBoilerPlate/services/console_utility.dart';
+import 'package:AuthenticatedBoilerPlate/services/dialog_service.dart';
+import 'package:AuthenticatedBoilerPlate/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
-import 'package:AuthenticatedBoilerplate/services/console_utility.dart';
-import 'package:AuthenticatedBoilerplate/services/dialog_service.dart';
-import 'package:AuthenticatedBoilerplate/services/firestore_service.dart';
+// import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
+// import 'package:AuthenticatedBoilerplate/services/console_utility.dart';
+// import 'package:AuthenticatedBoilerplate/services/dialog_service.dart';
+// import 'package:AuthenticatedBoilerplate/services/firestore_service.dart';
+// import '../models/app_user.dart';
+// import 'package:AuthenticatedBoilerplate/services/console_utility.dart';
 import '../models/app_user.dart';
-import 'package:AuthenticatedBoilerplate/services/console_utility.dart';
-import 'package:AuthenticatedBoilerplate/models/app_user.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuthInstance = FirebaseAuth.instance;
@@ -116,14 +120,14 @@ class AuthenticationService {
             ' Fireuser created \n\n user id = ${authResult.user.uid}');
 
         //create a [userProfile] for this user
-        await _firestoreService.createUserProfile(UserProfile(
-            id: authResult.user.uid,
-            firstName: userData['fullName'],
-            email: email,
-            userRoles: userData['roles'],
-            photoUrl: 'https://i.pravatar.cc/300',
-            profileTitle: userData['profileTitle']));
-        return authResult.user != null;
+        // await _firestoreService.createUserProfile(UserProfile(
+        //     id: authResult.user.uid,
+        //     firstName: userData['fullName'],
+        //     email: email,
+        //     userRoles: userData['roles'],
+        //     photoUrl: 'https://i.pravatar.cc/300',
+        //     profileTitle: userData['profileTitle']));
+        // return authResult.user != null;
       }
     } catch (e) {
       _dialogService.showDialog(

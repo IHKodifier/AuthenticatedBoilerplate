@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
-import 'package:AuthenticatedBoilerplate/services/authentication_service.dart';
-import 'package:AuthenticatedBoilerplate/services/firestore_service.dart';
-import 'package:AuthenticatedBoilerplate/services/navigation_service.dart';
-import 'package:AuthenticatedBoilerplate/services/dialog_service.dart';
+import '../services/dialog_service.dart';
+import '../services/authentication_service.dart';
+import '../services/firestore_service.dart';
+import '../services/navigation_service.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 

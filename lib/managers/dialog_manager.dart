@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
-import 'package:AuthenticatedBoilerplate/models/dialog_models.dart';
-import 'package:AuthenticatedBoilerplate/services/dialog_service.dart';
+import '../app/service_locator.dart';
+import '../models/dialog_models.dart';
+import '../services/dialog_service.dart';
 import "package:rflutter_alert/rflutter_alert.dart";
 
 class DialogManager extends StatefulWidget {
@@ -27,22 +27,23 @@ class _DialogManagerState extends State<DialogManager> {
 
   void _showDialog(AlertRequest request) {
     Alert(
-        context: context,
-        title: request.title,
-        desc: request.description,
-        closeFunction: () =>
-            _dialogService.dialogComplete(AlertResponse(confirmed: false)),
-        buttons: [
-          DialogButton(
-            width: 150,
-            child: Text(request.buttonTitle,),
-            onPressed: () {
-              _dialogService.dialogComplete(AlertResponse(confirmed: true));
-              Navigator.of(context).pop();
-            },
+      context: context,
+      title: request.title,
+      desc: request.description,
+      closeFunction: () =>
+          _dialogService.dialogComplete(AlertResponse(confirmed: false)),
+      buttons: [
+        DialogButton(
+          width: 150,
+          child: Text(
+            request.buttonTitle,
           ),
-         
-        ],
-        ).show();
+          onPressed: () {
+            _dialogService.dialogComplete(AlertResponse(confirmed: true));
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ).show();
   }
 }

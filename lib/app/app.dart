@@ -1,12 +1,15 @@
+import 'package:AuthenticatedBoilerPlate/managers/dialog_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:AuthenticatedBoilerplate/managers/dialog_manager.dart';
-import 'package:AuthenticatedBoilerplate/services/dialog_service.dart';
-import 'package:AuthenticatedBoilerplate/services/navigation_service.dart';
-import 'package:AuthenticatedBoilerplate/app/route_paths.dart' as routes;
-import 'package:AuthenticatedBoilerplate/services/router.dart' as router;
-import 'package:AuthenticatedBoilerplate/app/constants.dart' as constants;
+// import 'package:AuthenticatedBoilerplate/managers/dialog_manager.dart';
 
-import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
+import '../services/dialog_service.dart';
+import '../services/navigation_service.dart';
+
+import '../app/route_paths.dart' as routes;
+import '../services/router.dart' as router;
+import '../app/constants.dart' as constants;
+
+import '../app/service_locator.dart';
 
 class App extends StatelessWidget {
   ThemeData _buildTheme(BuildContext context) {
@@ -16,7 +19,6 @@ class App extends StatelessWidget {
       buttonColor: Theme.of(context).primaryColor,
       accentColor: constants.appAccentColor,
       backgroundColor: constants.appScaffoldBackgroundColor,
-
     );
   }
 

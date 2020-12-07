@@ -1,8 +1,9 @@
-import 'package:AuthenticatedBoilerplate/app/base_model.dart';
-import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
-import 'package:AuthenticatedBoilerplate/services/authentication_service.dart';
-import 'package:AuthenticatedBoilerplate/services/dialog_service.dart';
-import 'package:AuthenticatedBoilerplate/services/navigation_service.dart';
+
+import '../../../app/base_model.dart';
+import '../../../app/service_locator.dart';
+import '../../../services/authentication_service.dart';
+import '../../../services/dialog_service.dart';
+import '../../../services/navigation_service.dart';
 import '../../../app/route_paths.dart' as routes;
 
 class WelcomeViewModel extends BaseModel {

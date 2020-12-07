@@ -2,7 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_auth/';
 
-class UserProfile {
+class AppUser {
   final String id;
   final String email;
   final String firstName;
@@ -11,7 +11,7 @@ class UserProfile {
   final String userRoles;
   final String photoUrl;
 
-  UserProfile(
+  AppUser(
       {this.id,
       this.firstName,
       this.lastName,
@@ -20,7 +20,7 @@ class UserProfile {
       this.userRoles,
       this.photoUrl});
 
-  UserProfile.fromData(Map<String, dynamic> data)
+  AppUser.fromData(Map<String, dynamic> data)
       : id = data['id'],
         firstName = data['firstName'],
         lastName = data['lastName'],

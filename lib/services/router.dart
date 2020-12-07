@@ -1,11 +1,13 @@
-// import 'package:AuthenticatedBoilerplate/ui/views/home/home_view.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/login/login_view.dart';
-import 'package:AuthenticatedBoilerplate/app/route_paths.dart' as routes;
+import 'package:AuthenticatedBoilerPlate/ui/views/startup/startup_view.dart';
+
+import '../ui/views/login/login_view.dart';
+// import 'package:AuthenticatedBoilerplate/app/route_paths.dart' as routes;
+import '../app/route_paths.dart' as routes;
 import 'package:flutter/material.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/login/new_account_success.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/signup/signup_view.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/startup/startup_view.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/welcome/welcome_view.dart';
+
+import '../ui/views/login/new_account_success.dart';
+import '../ui/views/signup/signup_view.dart';
+import '../ui/views/welcome/welcome_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

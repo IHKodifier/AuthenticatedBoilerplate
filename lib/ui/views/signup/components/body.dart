@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/Login/login_view.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/Signup/components/background.dart';
+import '../../login/login_view.dart';
+import '../../signup/components/background.dart';
 import '../../../shared/or_divider.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/Signup/components/social_icon.dart';
-import 'package:AuthenticatedBoilerplate/ui/views/login/already_have_an_account.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/rounded_button.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/rounded_input_field.dart';
-import 'package:AuthenticatedBoilerplate/ui/shared/rounded_password_field.dart';
+import '../../../shared/social_card.dart';
+import '../../login/already_have_an_account.dart';
+import '../../../shared/rounded_button.dart';
+import '../../../shared/rounded_input_field.dart';
+import '../../../shared/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Body extends StatelessWidget {
