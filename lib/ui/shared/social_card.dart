@@ -22,10 +22,10 @@ class SocialCard extends StatelessWidget {
         margin:
             EdgeInsets.symmetric(horizontal:  2),
         padding: EdgeInsets.all( 12),
-        height: 40,
+        height: 60,
         width: 60,
         decoration: BoxDecoration(
-          color: Color(0xFFF5F6F9),
+          color: Colors.blueGrey.shade50,
           shape: BoxShape.circle,
         ),
         child: SvgPicture.asset(icon),

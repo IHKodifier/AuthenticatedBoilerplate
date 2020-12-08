@@ -1,3 +1,4 @@
+import 'package:AuthenticatedBoilerPlate/ui/views/profile/view_profile_view.dart';
 import 'package:AuthenticatedBoilerPlate/ui/views/startup/startup_view.dart';
 
 import '../ui/views/login/login_view.dart';
@@ -29,7 +30,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.WelcomeRoute:
       return MaterialPageRoute(builder: (context) => WelcomeView());
       break;
-      
+    case routes.ViewProfileView:
+      return MaterialPageRoute(builder: (context) => ViewProfileView());
+      break;
+
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

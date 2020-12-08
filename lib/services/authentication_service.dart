@@ -2,16 +2,13 @@ import 'package:AuthenticatedBoilerPlate/app/service_locator.dart';
 import 'package:AuthenticatedBoilerPlate/services/console_utility.dart';
 import 'package:AuthenticatedBoilerPlate/services/dialog_service.dart';
 import 'package:AuthenticatedBoilerPlate/services/firestore_service.dart';
+import '../app/route_paths.dart' as routes;
+import '../services/navigation_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:AuthenticatedBoilerplate/app/service_locator.dart';
-// import 'package:AuthenticatedBoilerplate/services/console_utility.dart';
-// import 'package:AuthenticatedBoilerplate/services/dialog_service.dart';
-// import 'package:AuthenticatedBoilerplate/services/firestore_service.dart';
-// import '../models/app_user.dart';
-// import 'package:AuthenticatedBoilerplate/services/console_utility.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../models/app_user.dart';
 
 class AuthenticationService {
@@ -20,7 +17,18 @@ class AuthenticationService {
   // final Stream<FirebaseUser> authenticationStateStream =
   //     FirebaseAuth.instance.onChanged;
   final FirestoreService _firestoreService = serviceLocator<FirestoreService>();
+  final NavigationService _navigationService =
+      serviceLocator<NavigationService>();
+
   dynamic currentUserProfile;
+
+// for google sign
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  GoogleSignInAccount googleSignInAccount;
+  GoogleSignInAuthentication googleSignInAuthentication;
+  AuthCredential authCredential;
+//  AuthResult authResult;
+
   String defaultRole;
 
 //attempts to sign in the user, returns [True] if success or otherwise [False]
@@ -162,8 +170,49 @@ class AuthenticationService {
     return _firebaseAuthInstance.currentUser;
   }
 
-  Future signInWithGoogle() {
-    ConsoleUtility.printToConsole('Attempting Google Sign in ');
+  Future signInWithGoogle() async {
+    ConsoleUtility.printToConsole(
+        'Attempting Google Sign in \n awaiting account selection...');
+
+    googleSignInAccount = await GoogleSignIn().signIn();
+
+    ConsoleUtility.printToConsole(
+        'selected google Account = ${googleSignInAccount.email}');
+
+    googleSignInAuthentication = await googleSignInAccount.authentication;
+
+    ConsoleUtility.printToConsole(
+        'Authenticating  ${googleSignInAccount.email} from Google....');
+
+    this.authCredential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken);
+    ConsoleUtility.printToConsole(
+        'Google successfully authenticated your account ');
+
+    ConsoleUtility.printToConsole(
+        'attempting to login ${googleSignInAccount.email} with Firebase');
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(authCredential);
+
+    if (userCredential.user != null) {
+      ConsoleUtility.printToConsole(
+          '${googleSignInAccount.email} successfully authenticated with Firebase ');
+      ConsoleUtility.printToConsole(
+          'FirebaseAuth User UID= ${userCredential.user.uid.toString()}');
+      if (userCredential.additionalUserInfo.isNewUser) {
+        ConsoleUtility.printToConsole(
+            'System detected that you are a NEW USER.....\n you will be directed to Edit profile View');
+        // TODO:Navigate to Edit Profile View
+        _navigationService.navigateTo(routes.ViewProfileView);
+        // TODO: save [AppUser] to firestore
+      } else {
+        ConsoleUtility.printToConsole(
+            'System detected that you are  \n NOT \n a new user.....\n you will be directed to Home View');
+        // TODO:Navigate to Home View
+        _navigationService.navigateTo(routes.HomeViewRoute);
+      }
+    } else {}
   }
 
   Future signInWithTwitter() {

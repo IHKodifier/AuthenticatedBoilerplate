@@ -38,7 +38,7 @@ class Body extends StatelessWidget {
                 LoginForm(),
                 SizedBox(height: 10),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SocialCard(
                       icon: "assets/icons/google-icon.svg",
