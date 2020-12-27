@@ -1,3 +1,4 @@
+import 'package:AuthenticatedBoilerPlate/ui/views/home/home_view.dart';
 import 'package:AuthenticatedBoilerPlate/ui/views/profile/view_profile_view.dart';
 import 'package:AuthenticatedBoilerPlate/ui/views/startup/startup_view.dart';
 
@@ -16,7 +17,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => LoginView());
       break;
     case routes.HomeViewRoute:
-      // return MaterialPageRoute(builder: (context) => HomeView());
+      return MaterialPageRoute(builder: (context) => HomeView());
       break;
     case routes.SignUPViewRoute:
       return MaterialPageRoute(builder: (context) => SignupView());
@@ -30,7 +31,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.WelcomeRoute:
       return MaterialPageRoute(builder: (context) => WelcomeView());
       break;
-    case routes.ViewProfileView:
+    case routes.ViewProfileViewRoute:
       return MaterialPageRoute(builder: (context) => ViewProfileView());
       break;
 

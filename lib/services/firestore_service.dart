@@ -8,17 +8,19 @@ class FirestoreService {
   final DialogService dialogService = serviceLocator<DialogService>();
 
   final CollectionReference _usercollectionReference =
-      Firestore.instance.collection('userProfiles');
+      Firestore.instance.collection('appUsers');
 
-  Future<bool> createUserProfile(
+  Future<bool> createAppUser(
     // AuthResult authResult,
     // var userProfileData,
     AppUser appUser,
   ) async {
     try {
       await _usercollectionReference
-          .document(appUser.id)
-          .setData(appUser.toJson());
+          .doc(appUser.email)
+          .set(appUser.toJson());
+      ConsoleUtility.printToConsole(
+          'created Appuser in Firestore\n${appUser.toJson().toString()}');
     } catch (e) {
       ConsoleUtility.printToConsole(
           'Firestore service\n createUserProfile\nerror encountered: \n${e.toString()}');

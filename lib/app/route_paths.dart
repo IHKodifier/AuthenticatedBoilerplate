@@ -5,4 +5,4 @@ const String NewAccountSuccessRoute = 'NewAccountSuccess';
 const String SignUPViewRoute = 'SignupView';
 const String StartupRoute = 'StartupView';
 const String WelcomeRoute = 'WelcomeRoute';
-const String ViewProfileView = 'View Profile-View';
+const String ViewProfileViewRoute = 'ViewProfileView';

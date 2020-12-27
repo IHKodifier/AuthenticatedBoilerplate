@@ -12,6 +12,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../models/app_user.dart';
 
 class AuthenticationService {
+  // all services
   final FirebaseAuth _firebaseAuthInstance = FirebaseAuth.instance;
   final DialogService _dialogService = serviceLocator<DialogService>();
   // final Stream<FirebaseUser> authenticationStateStream =
@@ -20,16 +21,19 @@ class AuthenticationService {
   final NavigationService _navigationService =
       serviceLocator<NavigationService>();
 
-  dynamic currentUserProfile;
+// this represents the App wide- Global currently authenticated user
+// if no user is logged in  this wil always be null
+  AppUser currentAppUser = null;
+  //  sets flag to display provider bage on View Profile
+  bool isNewAppUser = false;
+  String defaultRole;
 
-// for google sign
+  // for google sign
   final GoogleSignIn googleSignIn = GoogleSignIn();
   GoogleSignInAccount googleSignInAccount;
   GoogleSignInAuthentication googleSignInAuthentication;
   AuthCredential authCredential;
 //  AuthResult authResult;
-
-  String defaultRole;
 
 //attempts to sign in the user, returns [True] if success or otherwise [False]
   Future<bool> loginWithEmail({
@@ -55,7 +59,7 @@ class AuthenticationService {
       ConsoleUtility.printToConsole('sign in successfull');
       //get the user from [userProfiles] collection in firestore &
       //set the logged in user as current user across the app
-      await setAuthenticatedUser(authResult.user.uid);
+      // await setAuthenticatedUser(authResult.user.uid);
       return true;
     } else {
       return false;
@@ -64,37 +68,47 @@ class AuthenticationService {
 
   List<String> getAllRolesForUser() {
     List<String> roles;
-    if (currentUserProfile != null) {
-      if (currentUserProfile['userRoles'].toString().contains(',')) {
-        roles = currentUserProfile['userRoles'].toString().split(',');
-      } else {
-        roles = [currentUserProfile['userRoles'].toString()];
-      }
-      return roles;
-    } else {
-      throw Exception('defaultRole for user has not been set');
+    if (currentAppUser != null) {
+      //   if (currentUserProfile['userRoles'].toString().contains(',')) {
+      //     roles = currentUserProfile['userRoles'].toString().split(',');
+      //   } else {
+      //     roles = [currentUserProfile['userRoles'].toString()];
+      //   }
+      //   return roles;
+      // } else {
+      //   throw Exception('defaultRole for user has not been set');
     }
   }
 
-  Future<DocumentSnapshot> getUserProfile(String uid) async {
-    return Firestore.instance.collection('/userProfiles').document(uid).get();
-    // .where('uid', isEqualTo: uid)
-    // .getDocuments();
+  Future<DocumentSnapshot> getAppUserDoc(String uid) async {
+    DocumentSnapshot documentSnapshot =
+        await FirebaseFirestore.instance.collection('/appUsers').doc(uid).get();
+    if (documentSnapshot.data() != null) {
+      ConsoleUtility.printToConsole(
+          'AppUser Doc found for ${documentSnapshot.data().toString()}');
+      currentAppUser = AppUser.fromData(documentSnapshot.data());
+      ConsoleUtility.printToConsole(
+          'Global currentAppUser  variable has been set to ${currentAppUser.toString()}');
+    } else {
+      ConsoleUtility.printToConsole('AppUser Doc NOT Found');
+      isNewAppUser = false;
+      currentAppUser = null;
+    }
   }
 
   setAuthenticatedUser(String uid) async {
     try {
-      var returnvalue = await getUserProfile(uid);
-      if (returnvalue.data != null) {
-        currentUserProfile = returnvalue.data;
-        ConsoleUtility.printToConsole(currentUserProfile.toString());
-        var roles = getAllRolesForUser();
-        defaultRole = roles[0];
-        ConsoleUtility.printToConsole(
-            'defaultRole  is now set to " $defaultRole"');
-      } else {
-        // throw Exception('default user not set');
-      }
+      //   var returnvalue = await getUserProfile(uid);
+      //   if (returnvalue.data != null) {
+      //     currentUserProfile = returnvalue.data;
+      //     ConsoleUtility.printToConsole(currentUserProfile.toString());
+      //     var roles = getAllRolesForUser();
+      //     defaultRole = roles[0];
+      //     ConsoleUtility.printToConsole(
+      //         'defaultRole  is now set to " $defaultRole"');
+      //   } else {
+      //     // throw Exception('default user not set');
+      //   }
     } catch (e) {
       _dialogService.showDialog(title: e.message);
     }
@@ -127,17 +141,16 @@ class AuthenticationService {
       if (authResult.user != null) {
         ConsoleUtility.printToConsole(
             ' Fireuser created \n\n user id = ${authResult.user.uid}');
-
-        //create a [userProfile] for this user
-        // await _firestoreService.createUserProfile(UserProfile(
-        //     id: authResult.user.uid,
-        //     firstName: userData['fullName'],
-        //     email: email,
-        //     userRoles: userData['roles'],
-        //     photoUrl: 'https://i.pravatar.cc/300',
-        //     profileTitle: userData['profileTitle']));
-        // return authResult.user != null;
       }
+      //create a [userProfile] for this user
+      // await _firestoreService.createUserProfile(UserProfile(
+      //     id: authResult.user.uid,
+      //     firstName: userData['fullName'],
+      //     email: email,
+      //     userRoles: userData['roles'],
+      //     photoUrl: 'https://i.pravatar.cc/300',
+      //     profileTitle: userData['profileTitle']));
+      // return authResult.user != null;
     } catch (e) {
       _dialogService.showDialog(
         title: 'Signup Error',
@@ -157,17 +170,13 @@ class AuthenticationService {
     }
   }
 
-//create all user profile data here to save to [userProfiles] collection
+//create all user profile data here to save to [appUsers] collection
   _buildUserProfileMap(UserCredential userCredential, var userProfileData) {
     userProfileData['email'] = userCredential.user.email;
     userProfileData['uid'] = userCredential.user.uid;
     userProfileData['creeatedBy'] = 'debugAdmin';
     userProfileData['version'] = 'ViewModelBuiler2.2';
     userProfileData['photoUrl'] = 'http://i.pravatar.cc/300';
-  }
-
-  Future<User> getCurrentUserProfile() async {
-    return _firebaseAuthInstance.currentUser;
   }
 
   Future signInWithGoogle() async {
@@ -203,14 +212,23 @@ class AuthenticationService {
       if (userCredential.additionalUserInfo.isNewUser) {
         ConsoleUtility.printToConsole(
             'System detected that you are a NEW USER.....\n you will be directed to Edit profile View');
+
+
+        currentAppUser = AppUser.fromFireUser(userCredential.user);
+        isNewAppUser = userCredential.additionalUserInfo.isNewUser;
+        ConsoleUtility.printToConsole('creating AppUser in Firestore');
+        await FirestoreService().createAppUser(currentAppUser);
+
+
+
         // TODO:Navigate to Edit Profile View
-        _navigationService.navigateTo(routes.ViewProfileView);
+        _navigationService.navigateTo(routes.ViewProfileViewRoute);
         // TODO: save [AppUser] to firestore
       } else {
         ConsoleUtility.printToConsole(
             'System detected that you are  \n NOT \n a new user.....\n you will be directed to Home View');
         // TODO:Navigate to Home View
-        _navigationService.navigateTo(routes.HomeViewRoute);
+        _navigationService.navigateTo(routes.ViewProfileViewRoute);
       }
     } else {}
   }
