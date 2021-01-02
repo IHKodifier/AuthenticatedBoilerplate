@@ -9,6 +9,7 @@ class AppUser {
   // final String lastName;
   // final String userRoles;
   final String photoURL;
+  String providerId;
 
   AppUser(
       {this.uid,
@@ -19,11 +20,12 @@ class AppUser {
       // this.userRoles,
       this.photoURL});
 
-  AppUser.fromFireUser(User user)
+  AppUser.fromFireUser(User user, String providerId)
       : uid = user.uid,
         displayName = user.displayName,
         photoURL = user.photoURL,
-        email = user.email;
+        email = user.email,
+        providerId = providerId;
 
   AppUser.fromData(Map<String, dynamic> data)
       : uid = data['id'],
@@ -36,12 +38,13 @@ class AppUser {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': uid,
+      'uid': uid,
       'firstName': displayName,
       // 'lastName': lastName,
       'email': email,
       // 'profileTitle': profileTitle,
       // 'userRoles': userRoles,
+      'providerId':providerId,
       'photoUrl': photoURL,
     };
   }

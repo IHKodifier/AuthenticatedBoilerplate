@@ -20,8 +20,9 @@ class onBoaringPageView extends StatelessWidget {
         
         Spacer(flex: 2),
         Text(
-          "B2B Express",
-          style:Theme.of(context).textTheme.headline4.copyWith(fontWeight: FontWeight.w800, color: Theme.of(context).primaryColor)),
+          "Authenticated BoilerPlate",
+          style:Theme.of(context).textTheme.headline4.copyWith(fontSize: 22,
+            fontWeight: FontWeight.w800, color: Theme.of(context).primaryColor)),
         Spacer(),
         Text(
           text,

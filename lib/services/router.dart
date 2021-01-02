@@ -3,7 +3,6 @@ import 'package:AuthenticatedBoilerPlate/ui/views/profile/view_profile_view.dart
 import 'package:AuthenticatedBoilerPlate/ui/views/startup/startup_view.dart';
 
 import '../ui/views/login/login_view.dart';
-// import 'package:AuthenticatedBoilerplate/app/route_paths.dart' as routes;
 import '../app/route_paths.dart' as routes;
 import 'package:flutter/material.dart';
 

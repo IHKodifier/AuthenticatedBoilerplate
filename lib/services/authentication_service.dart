@@ -180,6 +180,7 @@ class AuthenticationService {
   }
 
   Future signInWithGoogle() async {
+    // setBusy(true);
     ConsoleUtility.printToConsole(
         'Attempting Google Sign in \n awaiting account selection...');
 
@@ -197,38 +198,37 @@ class AuthenticationService {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken);
     ConsoleUtility.printToConsole(
-        'Google successfully authenticated your account ');
-
+        'Google successfully authenticated your account');
     ConsoleUtility.printToConsole(
         'attempting to login ${googleSignInAccount.email} with Firebase');
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(authCredential);
 
     if (userCredential.user != null) {
+      // sign in with firebase successfull
       ConsoleUtility.printToConsole(
           '${googleSignInAccount.email} successfully authenticated with Firebase ');
       ConsoleUtility.printToConsole(
-          'FirebaseAuth User UID= ${userCredential.user.uid.toString()}');
+          'FirebaseAuth User  UID equals  ${userCredential.user.uid.toString()}');
+      isNewAppUser = userCredential.additionalUserInfo.isNewUser;
+      currentAppUser = AppUser.fromFireUser(
+          userCredential.user, userCredential.additionalUserInfo.providerId);
+
       if (userCredential.additionalUserInfo.isNewUser) {
+        //  save [AppUser] to firestore
         ConsoleUtility.printToConsole(
-            'System detected that you are a NEW USER.....\n you will be directed to Edit profile View');
+            'creating AppUser for the user in Firestore');
 
-
-        currentAppUser = AppUser.fromFireUser(userCredential.user);
-        isNewAppUser = userCredential.additionalUserInfo.isNewUser;
-        ConsoleUtility.printToConsole('creating AppUser in Firestore');
         await FirestoreService().createAppUser(currentAppUser);
-
-
-
-        // TODO:Navigate to Edit Profile View
+        // Navigate to Edit Profile View
         _navigationService.navigateTo(routes.ViewProfileViewRoute);
-        // TODO: save [AppUser] to firestore
       } else {
         ConsoleUtility.printToConsole(
             'System detected that you are  \n NOT \n a new user.....\n you will be directed to Home View');
-        // TODO:Navigate to Home View
-        _navigationService.navigateTo(routes.ViewProfileViewRoute);
+        // Navigate to Home View
+        // _navigationService.navigateTo(routes.HomeViewRoute);
+        // TODO: read  returning user from appUsers and set to current AppUser
+        //
       }
     } else {}
   }

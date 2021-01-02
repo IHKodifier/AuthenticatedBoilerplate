@@ -1,5 +1,6 @@
 import 'package:AuthenticatedBoilerPlate/app/service_locator.dart';
 import 'package:AuthenticatedBoilerPlate/services/authentication_service.dart';
+import 'package:AuthenticatedBoilerPlate/ui/views/login/login_viewmodel.dart';
 
 import '../../../../app/size_config.dart';
 import '../../../shared/social_card.dart';
@@ -11,6 +12,9 @@ import '../components/login_form.dart';
 class Body extends StatelessWidget {
   final AuthenticationService _authenticationService =
       serviceLocator<AuthenticationService>();
+  final LoginViewModel model;
+
+  Body({Key key, this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,9 +45,12 @@ class Body extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SocialCard(
-                      icon: "assets/icons/google-icon.svg",
-                      press: _authenticationService.signInWithGoogle
-                    ),
+                        icon: "assets/icons/google-icon.svg",
+                        press: () {
+                          model.setBusy(true);
+                          _authenticationService.signInWithGoogle();
+                          model.setBusy(false);
+                        }),
                     SocialCard(
                       icon: "assets/icons/facebook-2.svg",
                       press: _authenticationService.signInWithFacebook,
@@ -51,12 +58,10 @@ class Body extends StatelessWidget {
                     SocialCard(
                       icon: "assets/icons/twitter.svg",
                       press: _authenticationService.signInWithTwitter,
-                      
                     ),
                     SocialCard(
                       icon: "assets/icons/SIMCard.svg",
                       press: _authenticationService.signInWithPhoneNumber,
-
                     ),
                   ],
                 ),

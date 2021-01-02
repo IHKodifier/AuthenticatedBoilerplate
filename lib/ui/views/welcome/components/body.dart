@@ -19,7 +19,7 @@ class Body extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top:16.0),
               child: Text(
-          "B2B Express",
+          "Authenticated Boiler Plate",
           style: TextStyle(
             // fontSize: getProportionateScreenWidth(36),
             color: Theme.of(context).primaryColor,
