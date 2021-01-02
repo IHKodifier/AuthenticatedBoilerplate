@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/app_user.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as JSON;
 
 class AuthenticationService {
   // all services
@@ -27,6 +30,9 @@ class AuthenticationService {
   //  sets flag to display provider bage on View Profile
   bool isNewAppUser = false;
   String defaultRole;
+  // required by fb login
+  Map userProfile;
+  bool _isLoggedIn = false;
 
   // for google sign
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -34,6 +40,7 @@ class AuthenticationService {
   GoogleSignInAuthentication googleSignInAuthentication;
   AuthCredential authCredential;
 //  AuthResult authResult;
+  final facebookLogin = FacebookLogin();
 
 //attempts to sign in the user, returns [True] if success or otherwise [False]
   Future<bool> loginWithEmail({
@@ -233,12 +240,35 @@ class AuthenticationService {
     } else {}
   }
 
-  Future signInWithTwitter() {
-    ConsoleUtility.printToConsole('Attempting Twitter Sign in ');
+  Future signInWithFacebook() async {
+    ConsoleUtility.printToConsole('Attempting Facebook Sign in ');
+    final result = await facebookLogin.logIn(['email']);
+    //  facebookLogin.l
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final token = result.accessToken.token;
+        final graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
+        final profile = JSON.jsonDecode(graphResponse.body);
+        print(profile);
+
+        userProfile = profile;
+        _isLoggedIn = true;
+
+        break;
+
+      case FacebookLoginStatus.cancelledByUser:
+        _isLoggedIn = false;
+        break;
+      case FacebookLoginStatus.error:
+        _isLoggedIn = false;
+        break;
+    }
   }
 
-  Future signInWithFacebook() {
-    ConsoleUtility.printToConsole('Attempting Facebook Sign in ');
+  Future signInWithTwitter() {
+    ConsoleUtility.printToConsole('Attempting Twitter Sign in ');
   }
 
   Future signInWithPhoneNumber() {
