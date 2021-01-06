@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/app_user.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 
@@ -40,7 +40,7 @@ class AuthenticationService {
   GoogleSignInAuthentication googleSignInAuthentication;
   AuthCredential authCredential;
 //  AuthResult authResult;
-  final facebookLogin = FacebookLogin();
+  final fbLogin = FacebookLogin(debug: false);
 
 //attempts to sign in the user, returns [True] if success or otherwise [False]
   Future<bool> loginWithEmail({
@@ -242,28 +242,36 @@ class AuthenticationService {
 
   Future signInWithFacebook() async {
     ConsoleUtility.printToConsole('Attempting Facebook Sign in ');
-    final result = await facebookLogin.logIn(['email']);
-    //  facebookLogin.l
-
+    final result = await fbLogin.logIn(permissions: [
+      FacebookPermission.publicProfile,
+      FacebookPermission.email,
+      // FacebookPermission.userPhotos
+    ]);
     switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final token = result.accessToken.token;
-        final graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
-        final profile = JSON.jsonDecode(graphResponse.body);
-        print(profile);
-
-        userProfile = profile;
-        _isLoggedIn = true;
+      case FacebookLoginStatus.success:
+        ConsoleUtility.printToConsole('Facebook Login Success');
+        // TODO uncomment the code below and implement app speific logic
+        final FacebookAccessToken facebookAccessToken = result.accessToken;
+        // convert to Auth Credential
+        final AuthCredential fbAuthCredential =
+            FacebookAuthProvider.credential(facebookAccessToken.token);
+        // attempt login with Firebase
+        ConsoleUtility.printToConsole(
+            'attempting to login facebook user with Firebase');
+        final authResult =
+            await _firebaseAuthInstance.signInWithCredential(fbAuthCredential);
+        ConsoleUtility.printToConsole(
+            '${authResult.user.displayName} has been logged into Firebase with facebook using email ${authResult.user.email}');
+        ConsoleUtility.printToConsole('checking newuser=${authResult.additionalUserInfo.isNewUser.toString()}');
+        // authResult.additionalUserInfo.isNewUser;
 
         break;
-
-      case FacebookLoginStatus.cancelledByUser:
-        _isLoggedIn = false;
+      case FacebookLoginStatus.cancel:
         break;
       case FacebookLoginStatus.error:
-        _isLoggedIn = false;
         break;
+
+      default:
     }
   }
 

@@ -286,13 +286,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_facebook_login:
+  flutter_login_facebook:
     dependency: "direct main"
     description:
-      name: flutter_facebook_login
+      name: flutter_login_facebook
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "0.4.2+2"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -388,7 +388,7 @@ packages:
     source: hosted
     version: "0.14.0+3"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -450,6 +450,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  list_ext:
+    dependency: transitive
+    description:
+      name: list_ext
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.15"
   logging:
     dependency: transitive
     description:
