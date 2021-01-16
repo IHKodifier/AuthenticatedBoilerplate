@@ -1,6 +1,8 @@
 import 'package:AuthenticatedBoilerPlate/app/service_locator.dart';
 import 'package:AuthenticatedBoilerPlate/services/authentication_service.dart';
+import 'package:AuthenticatedBoilerPlate/services/navigation_service.dart';
 import 'package:AuthenticatedBoilerPlate/ui/views/login/login_viewmodel.dart';
+import '../../../../app/route_paths.dart' as routes;
 
 import '../../../../app/size_config.dart';
 import '../../../shared/social_card.dart';
@@ -10,8 +12,8 @@ import '../../../../app/constants.dart';
 import '../components/login_form.dart';
 
 class Body extends StatelessWidget {
-  final AuthenticationService _authenticationService =
-      serviceLocator<AuthenticationService>();
+  final AuthenticationService _authenticationService =serviceLocator<AuthenticationService>();
+  final NavigationService navigationService=serviceLocator<NavigationService>();
   final LoginViewModel model;
 
   Body({Key key, this.model}) : super(key: key);
@@ -40,7 +42,7 @@ class Body extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 LoginForm(),
-                SizedBox(height: 10),
+                SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -55,17 +57,17 @@ class Body extends StatelessWidget {
                       icon: "assets/icons/facebook-2.svg",
                       press: _authenticationService.signInWithFacebook,
                     ),
-                    SocialCard(
-                      icon: "assets/icons/twitter.svg",
-                      press: _authenticationService.signInWithTwitter,
-                    ),
+                    // SocialCard(
+                    //   icon: "assets/icons/twitter.svg",
+                    //   press: _authenticationService.signInWithTwitter,
+                    // ),
                     SocialCard(
                       icon: "assets/icons/SIMCard.svg",
-                      press: _authenticationService.signInWithPhoneNumber,
+                      press: (){navigationService.navigateTo(routes.PhoneSignupViewRoute);}
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                // SizedBox(height: 10),
                 // NoAccountText(,
               ],
             ),
@@ -74,4 +76,6 @@ class Body extends StatelessWidget {
       ),
     );
   }
+
+
 }

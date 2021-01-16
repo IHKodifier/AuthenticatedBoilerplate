@@ -14,7 +14,7 @@ class LoginViewModel extends BaseModel {
  
  
   //all services needed
-  AuthenticationService _authenticationService =
+   AuthenticationService _authenticationService =
       serviceLocator<AuthenticationService>();
   DialogService _dialogService = serviceLocator<DialogService>();
   NavigationService _navigationService = serviceLocator<NavigationService>();

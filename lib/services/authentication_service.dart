@@ -16,23 +16,32 @@ import 'dart:convert' as JSON;
 
 class AuthenticationService {
   // all services
-  final FirebaseAuth _firebaseAuthInstance = FirebaseAuth.instance;
+  final FirebaseAuth _authInstance = FirebaseAuth.instance;
   final DialogService _dialogService = serviceLocator<DialogService>();
-  // final Stream<FirebaseUser> authenticationStateStream =
-  //     FirebaseAuth.instance.onChanged;
   final FirestoreService _firestoreService = serviceLocator<FirestoreService>();
   final NavigationService _navigationService =
       serviceLocator<NavigationService>();
-
+  bool isBusy = false;
+FirebaseAuth get authInstance=>_authInstance;
 // this represents the App wide- Global currently authenticated user
 // if no user is logged in  this wil always be null
   AppUser currentAppUser = null;
+
   //  sets flag to display provider bage on View Profile
   bool isNewAppUser = false;
   String defaultRole;
-  // required by fb login
+
+  //  FB Sign In
   Map userProfile;
   bool _isLoggedIn = false;
+
+//Phone Sign In
+  String phoneNumber;
+  String verificationId;
+  String otp;
+  bool codeHasBeenSent = false;
+  String smsStatus =
+      'We will send you \n a 6 digit code on\n  this mobile to verify you have access to this number';
 
   // for google sign
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -49,7 +58,7 @@ class AuthenticationService {
   }) async {
     var authResult;
     try {
-      authResult = await _firebaseAuthInstance.signInWithEmailAndPassword(
+      authResult = await _authInstance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -125,6 +134,7 @@ class AuthenticationService {
     var user = await FirebaseAuth.instance.currentUser;
     if (user != null) {
       await setAuthenticatedUser(user.uid);
+
       ConsoleUtility.printToConsole(
           'ALREADY logged in user detected.\n returning ${user == null}');
       return true;
@@ -141,7 +151,7 @@ class AuthenticationService {
   }) async {
     var authResult;
     try {
-      authResult = await _firebaseAuthInstance.createUserWithEmailAndPassword(
+      authResult = await _authInstance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -170,7 +180,7 @@ class AuthenticationService {
 
   Future signout() async {
     try {
-      await _firebaseAuthInstance.signOut();
+      await _authInstance.signOut();
       ConsoleUtility.printToConsole('logged out of FireBase');
     } catch (e) {
       ConsoleUtility.printToConsole(e.message);
@@ -259,10 +269,11 @@ class AuthenticationService {
         ConsoleUtility.printToConsole(
             'attempting to login facebook user with Firebase');
         final authResult =
-            await _firebaseAuthInstance.signInWithCredential(fbAuthCredential);
+            await _authInstance.signInWithCredential(fbAuthCredential);
         ConsoleUtility.printToConsole(
             '${authResult.user.displayName} has been logged into Firebase with facebook using email ${authResult.user.email}');
-        ConsoleUtility.printToConsole('checking newuser=${authResult.additionalUserInfo.isNewUser.toString()}');
+        ConsoleUtility.printToConsole(
+            'checking newuser=${authResult.additionalUserInfo.isNewUser.toString()}');
         // authResult.additionalUserInfo.isNewUser;
 
         break;
@@ -279,7 +290,78 @@ class AuthenticationService {
     ConsoleUtility.printToConsole('Attempting Twitter Sign in ');
   }
 
-  Future signInWithPhoneNumber() {
-    ConsoleUtility.printToConsole('Attempting PhoneNumber Sign in ');
+  Future<void> signInWithPhoneNumber(String phoneNumber) async {
+    this.phoneNumber = phoneNumber;
+    ConsoleUtility.printToConsole(
+        'Authentication Service Attempting Phone Number Sign in with \t ${this.phoneNumber} ');
+    isBusy = true;
+    // await _authInstance.verifyPhoneNumber(
+    //     phoneNumber: this.phoneNumber,
+    //     timeout: Duration(seconds: 20),
+    //     verificationCompleted: verificationCompleted,
+    //     verificationFailed: verificationFailed,
+    //     codeSent: handleCodeSent,-r
+    //     codeAutoRetrievalTimeout: autoTimeOut);
+    smsStatus = 'We will soon send the SMS code.....';
+    isBusy = false;
   }
+
+  final PhoneVerificationFailed verificationFailed =
+      (FirebaseAuthException exception) {
+    // TODO implement this.
+    ConsoleUtility.printToConsole(exception.message);
+  };
+
+  PhoneVerificationCompleted verificationCompleted(
+      PhoneAuthCredential phoneAuthCredential) {
+    ConsoleUtility.printToConsole(
+        // TODO
+        'looks like phone verifiction met success\n this is the auth credential\n${phoneAuthCredential.toString()}');
+    _authInstance.signInWithCredential(phoneAuthCredential).then((value) {
+      if (value.user != null) {
+        ConsoleUtility.printToConsole('fireuser  Auto created');
+        isBusy = false;
+      }
+    });
+
+    // phoneAuthCredential.
+  }
+
+  handleCodeSent(String verId, [int forceCodeResend]) {
+    ConsoleUtility.printToConsole('you otp has been sent ');
+    smsStatus =
+        ' Your sms Code has been sent!!!! \nWe are attempting to auto validate...';
+    isBusy = true;
+    this.verificationId = verId;
+  }
+
+  PhoneCodeAutoRetrievalTimeout autoTimeOut(String verId) {
+    ConsoleUtility.printToConsole('Auto validation of OTP has did not succeed');
+    smsStatus =
+        'Auto validation of OTP has did not succeed. Please enter OTP  below and press "submit"';
+    // this.codeHasBeenSent = true;
+    isBusy = false;
+
+    // verificationId = verId;
+    this.verificationId = verId;
+  }
+
+  signInWithPhoneCredential(String otp) {
+    final credential = PhoneAuthProvider.credential(
+        verificationId: this.verificationId, smsCode: otp);
+    _authInstance.signInWithCredential(credential).then((value) {
+      ConsoleUtility.printToConsole('otp verfied. \n you will be logged in ');
+      ConsoleUtility.printToConsole(
+          'instance  wide current user is  ${(_authInstance.currentUser != null).toString()} ');
+    }).catchError(onPhoneSignInError);
+  }
+
+  onPhoneSignInError() {
+    ConsoleUtility.printToConsole('some phone sign in error occured');
+  }
+    Future<UserCredential> signInWithCredential(UserCredential credential)async  {
+      var future = await   _authInstance.signInWithCredential(credential as AuthCredential);
+            return future;
+
+    }
 }

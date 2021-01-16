@@ -6,3 +6,4 @@ const String SignUPViewRoute = 'SignupView';
 const String StartupRoute = 'StartupView';
 const String WelcomeRoute = 'WelcomeRoute';
 const String ViewProfileViewRoute = 'ViewProfileView';
+const String PhoneSignupViewRoute = 'PhoneSignUpView';

@@ -25,17 +25,21 @@ dependencies:
     sdk: flutter
   cloud_firestore: null
   cupertino_icons: ^0.1.3
+  device_info: ^1.0.0
   firebase_auth: null
   firebase_core: ^0.5.0
   flutter_login_facebook: ^0.4.2+2
+  flutter_signin_button: ^1.1.0
   flutter_spinkit: null
   flutter_svg: null
+  flutter_twitter: ^1.1.3
   font_awesome_flutter: ^8.8.1
   get_it: ^4.0.4
   google_fonts: null
   google_sign_in: ^4.5.6
-  # http: ^0.12.2
   injectable: null
+  international_phone_input: ^1.0.4
+  # json_serializable: ^3.5.1
   rflutter_alert: null
   stacked: ^1.5.2
   stacked_services: null

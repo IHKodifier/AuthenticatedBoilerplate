@@ -1,15 +1,27 @@
+import 'package:AuthenticatedBoilerPlate/ui/views/home/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 
 
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Material(
-          child: Container(color: Colors.greenAccent,
-      child: Center(
-        child: Text('user Home'),
-      ),
-        
+    return ViewModelBuilder<HomeViewModel>.reactive(
+      viewModelBuilder: ()=>HomeViewModel(),
+      builder: (context,model,child)=>Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment:MainAxisAlignment.center,
+        children: [
+        Text('user Home',
+        style:Theme.of(context).textTheme.button,
+        ),
+        RaisedButton(onPressed: model.signOut,
+        color: Theme.of(context).primaryColor,
+        child: Text('sign out',),)
+        ],
+          ),
+        ),
       ),
     );
   }

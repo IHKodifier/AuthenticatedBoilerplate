@@ -10,9 +10,11 @@ import 'package:stacked/stacked.dart';
 import '../welcome/welcome_view.dart';
 import 'package:stacked/stacked.dart';
 import '../../../app/route_paths.dart' as routes;
+import 'package:device_info/device_info.dart';
 
 class StartupViewModel extends BaseViewModel {
-  AuthenticationService _authenticationService = serviceLocator<AuthenticationService>();
+  AuthenticationService _authenticationService =
+      serviceLocator<AuthenticationService>();
   NavigationService _navigationService = serviceLocator<NavigationService>();
   DialogService _dialogService = serviceLocator<DialogService>();
 
@@ -34,11 +36,10 @@ class StartupViewModel extends BaseViewModel {
     }
   }
 
-
   Future resolveStartupLogin() async {
     setBusy(true);
+    ConsoleUtility.printDeviceInfo();
     var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
-    notifyListeners();
     setBusy(false);
     if (hasLoggedInUser) {
       //  await  _authenticationService.setAuthenticatedUserFromFirestore();
