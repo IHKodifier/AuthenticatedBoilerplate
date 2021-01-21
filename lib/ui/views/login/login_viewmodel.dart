@@ -11,23 +11,20 @@ import '../../../app/route_paths.dart' as routes;
 import '../login/login_view.dart';
 
 class LoginViewModel extends BaseModel {
- 
- 
   //all services needed
-   AuthenticationService _authenticationService =
+  AuthenticationService _authenticationService =
       serviceLocator<AuthenticationService>();
   DialogService _dialogService = serviceLocator<DialogService>();
   NavigationService _navigationService = serviceLocator<NavigationService>();
 
-
-//attempts to login a user into app , returns a [true] and navigates to [HomeViewRoute] if successfull or 
+//attempts to login a user into app , returns a [true] and navigates to [HomeViewRoute] if successfull or
 // return [false] navigates to [LoginViewRoute] if login fails
   Future<bool> loginWithEmail({
     @required String email,
     @required String password,
   }) async {
     setBusy(true);
-      notifyListeners();
+    notifyListeners();
     var loginSuccessfull = await _authenticationService.loginWithEmail(
         email: email, password: password);
 
@@ -43,8 +40,6 @@ class LoginViewModel extends BaseModel {
       return false;
     }
   }
-
-  
 
   Future showDialogFeatureNotReady() async {
     ConsoleUtility.printToConsole('dialog called');
@@ -63,5 +58,5 @@ class LoginViewModel extends BaseModel {
     _navigationService.navigateTo(routes.SignUPViewRoute);
   }
 
-  
+  Future<dynamic> signupWithEmail({String email, String password}) {}
 }

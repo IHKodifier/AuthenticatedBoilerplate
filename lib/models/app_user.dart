@@ -2,13 +2,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_auth/';
 
+/// default [photoURL] if none provided
+String _photoURLifBlank =
+    'https://st4.depositphotos.com/15973376/24173/v/950/depositphotos_241732228-stock-illustration-user-account-circular-line-icon.jpg';
+
 class AppUser {
   final String uid;
   final String email;
-  final String displayName;
+   String displayName;
   // final String lastName;
   // final String userRoles;
-  final String photoURL;
+  String photoURL;
   String providerId;
 
   AppUser(
@@ -20,11 +24,13 @@ class AppUser {
       // this.userRoles,
       this.photoURL});
 
-  AppUser.fromFireUser(User user, String providerId)
-      : uid = user.uid,
-        displayName = user.displayName,
-        photoURL = user.photoURL,
-        email = user.email,
+  AppUser.fromFireUser({UserCredential userCredential, String providerId})
+      : uid = userCredential.user.uid,
+        displayName = userCredential.user.displayName,
+        photoURL = userCredential.user.photoURL == null
+            ? _photoURLifBlank
+            : userCredential.user.photoURL,
+        email = userCredential.user.email,
         providerId = providerId;
 
   AppUser.fromData(Map<String, dynamic> data)
@@ -44,7 +50,7 @@ class AppUser {
       'email': email,
       // 'profileTitle': profileTitle,
       // 'userRoles': userRoles,
-      'providerId':providerId,
+      'providerId': providerId,
       'photoUrl': photoURL,
     };
   }

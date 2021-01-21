@@ -15,10 +15,9 @@ class PhoneSignupView extends StatelessWidget {
   // String verificationId;
   TextEditingController smsTextEditingController = TextEditingController();
   TextEditingController phonNumberEditingController = TextEditingController();
-    
-  
-    final DialogService dialogService = serviceLocator<DialogService>();
-    // AuthenticationService _authService = serviceLocator<AuthenticationService>();
+
+  final DialogService dialogService = serviceLocator<DialogService>();
+  // AuthenticationService _authService = serviceLocator<AuthenticationService>();
   // }
 
   @override
@@ -28,8 +27,16 @@ class PhoneSignupView extends StatelessWidget {
       // onModelReady: (model) => model.initModel(),
       builder: (builder, model, child) => Scaffold(
         appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          iconTheme: Theme.of(context)
+              .iconTheme
+              .copyWith(color: Theme.of(context).primaryColor),
           title: Text(
             'Sign up with Phone Number',
+            style: Theme.of(context).textTheme.bodyText1.copyWith(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 14,
+                ),
           ),
         ),
         body: ListView(
@@ -83,50 +90,54 @@ class PhoneSignupView extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  
-                 Padding(
-                   padding: const EdgeInsets.all( 16),
-                   child: Text('1==>\t\t\t We will send a 6 digit code on above Phone Number to verify your access to  above phone ',
-                   style: Theme.of(context).textTheme.caption),
-                 ),
-                //  Padding(
-                //    padding: const EdgeInsets.all(16),
-                //    child: Text('2==>\t\t\t We will try to auto validate the code if number is active on this device',
-                //    style: Theme.of(context).textTheme.caption),
-                //  ),
-                 Padding(
-                   padding: const EdgeInsets.all(16),
-                   child: Text('2==>\t\t\t If Auto validation fails, enter the 6 Digit code below and press subit',
-                   style: Theme.of(context).textTheme.caption),
-                 ),
 
-                        SizedBox(
-                          height: 10,
-                        ),
-                  
-                        smsTextField(model, context),
-                        SizedBox(height: 10,),
-                        RaisedButton(
-                          child: Text('submit OTP',
-                          style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            .copyWith(color: Colors.white),),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () {
-                            // dialogService.
-                            model.notifyListeners();
-                            ConsoleUtility.printToConsole(
-                                'the OTP enetered was ${model.otp}');
-                            AuthCredential authCredential =
-                                PhoneAuthProvider.credential(
-                                    verificationId: model.verificationId,
-                                    smsCode: model.otp);
-                            model.signInWithCredential(
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                        '1==>\t\t\t We will send a 6 digit code on above Phone Number to verify your access to  above phone ',
+                        style: Theme.of(context).textTheme.caption),
+                  ),
+                  //  Padding(
+                  //    padding: const EdgeInsets.all(16),
+                  //    child: Text('2==>\t\t\t We will try to auto validate the code if number is active on this device',
+                  //    style: Theme.of(context).textTheme.caption),
+                  //  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                        '2==>\t\t\t If Auto validation fails, enter the 6 Digit code below and press subit',
+                        style: Theme.of(context).textTheme.caption),
+                  ),
 
-                            authCredential);
-                          },
-                        ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  smsTextField(model, context),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  RaisedButton(
+                    child: Text(
+                      'submit OTP',
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1
+                          .copyWith(color: Colors.white),
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      // dialogService.
+                      model.notifyListeners();
+                      ConsoleUtility.printToConsole(
+                          'the OTP enetered was ${model.otp}');
+                      AuthCredential authCredential =
+                          PhoneAuthProvider.credential(
+                              verificationId: model.verificationId,
+                              smsCode: model.otp);
+                      model.signInWithCredential(authCredential);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -135,7 +146,6 @@ class PhoneSignupView extends StatelessWidget {
       ),
     );
   }
-
 
   smsTextField(PhoneSignupViewModel model, BuildContext context) {
     return Container(

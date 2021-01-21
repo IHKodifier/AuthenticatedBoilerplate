@@ -17,7 +17,7 @@ class ViewProfileView extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.network(
-                model.photoURL,
+                model.currentAppUser.photoURL,
                 height: 90,
               ),
             ),

@@ -6,6 +6,7 @@ import '../../../services/navigation_service.dart';
 import '../../../services/dialog_service.dart';
 import '../../../models/app_user.dart';
 import '../../../app/service_locator.dart';
+import '../../../app/route_paths.dart' as routes;
 
 class ViewProfileViewModel extends BaseModel {
   //all services needed
@@ -28,11 +29,12 @@ class ViewProfileViewModel extends BaseModel {
     ConsoleUtility.printToConsole('Signout successfully ');
     currentAppUser = null;
     isNewAppUser = false;
-    ConsoleUtility.printToConsole('currentAppUser set to null \nisnewAppUser sert to false');
+    ConsoleUtility.printToConsole(
+        'currentAppUser set to null \nisnewAppUser sert to false');
+    _navigationService.popAndPush(routes.LoginRoute);
   }
 
   navigateToUserHome() {
     _navigationService.navigateTo('HomeViewRoute');
-
   }
 }

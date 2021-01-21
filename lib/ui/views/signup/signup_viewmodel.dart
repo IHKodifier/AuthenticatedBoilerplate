@@ -69,22 +69,22 @@ class SignupViewModel extends BaseModel {
   Future<dynamic> signupWithEmil(
     String email,
     String password,
-    var userData,
+    // var userData,
   ) async {
     setBusy(true);
-    userData['roles'] = selectedRole;
+    // userData['roles'] = selectedRole;
     try {
       var SignupResult = await _authenticationService.signupWithEmail(
-          email: email, password: password, userData: userData);
+          email: email, password: password, );
       setBusy(false);
 
-      if (SignupResult != null) {
-        //user was SUCCESSFULLY CREATED in Firbase
-        _navigationService.popAndPush(routes.NewAccountSuccessRoute);
-      } else if (SignupResult == null) {
-        //user was not successfully created
-        ConsoleUtility.printToConsole('user sign up failed');
-      } else {}
+      // if (SignupResult != null) {
+      //   //user was SUCCESSFULLY CREATED in Firbase
+      //   _navigationService.popAndPush(routes.NewAccountSuccessRoute);
+      // } else if (SignupResult == null) {
+      //   //user was not successfully created 
+      //   ConsoleUtility.printToConsole('user sign up failed');
+      // } else {}
     } catch (e) {
       setBusy(false);
       ConsoleUtility.printToConsole(e.toString());

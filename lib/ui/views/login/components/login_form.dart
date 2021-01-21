@@ -1,3 +1,5 @@
+import 'package:AuthenticatedBoilerPlate/ui/views/login/login_viewmodel.dart';
+
 import '../../../../app/constants.dart';
 import '../../../../services/form_error.dart';
 import '../../../shared/custom_surfix_icon.dart';
@@ -6,8 +8,11 @@ import 'package:flutter/material.dart';
 import '../../../../app/route_paths.dart' as routes;
 
 class LoginForm extends StatefulWidget {
+  const LoginForm({Key key, this.model}) : super(key: key);
+
   @override
   _LoginFormState createState() => _LoginFormState();
+  final LoginViewModel model;
 }
 
 class _LoginFormState extends State<LoginForm> {
@@ -40,20 +45,22 @@ class _LoginFormState extends State<LoginForm> {
           buildEmailFormField(),
           SizedBox(height: 10),
           buildPasswordFormField(),
-          SizedBox(height: 10),
+          SizedBox(height: 20),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Checkbox(
-                value: remember,
-                activeColor: Theme.of(context).primaryColor,
-                onChanged: (value) {
-                  setState(() {
-                    remember = value;
-                  });
-                },
-              ),
-              Text("Remember me"),
-              Spacer(),
+              // Checkbox(
+              //   value: remember,
+              //   activeColor: Theme.of(context).primaryColor,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       remember = value;
+              //     });
+              //   },
+              // ),
+              // Text("Remember me"),
+              // Spacer(),
               GestureDetector(
                 // onTap: () => Navigator.pushNamed(
                 //     context, ForgotPasswordScreen.routeName),
@@ -72,7 +79,8 @@ class _LoginFormState extends State<LoginForm> {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
                 // if all are valid then go to success screen
-                Navigator.pushNamed(context, routes.HomeViewRoute);
+                widget.model.loginWithEmail(email: email, password: password);
+                // Navigator.pushNamed(context, routes.HomeViewRoute);
               }
             },
           ),

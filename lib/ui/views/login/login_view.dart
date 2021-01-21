@@ -12,21 +12,23 @@ class LoginView extends StatelessWidget {
   TextEditingController _passwordController = TextEditingController();
   BuildContext _localContext;
 
+
   @override
   Widget build(BuildContext context) {
     this._localContext = context;
     return ViewModelBuilder<LoginViewModel>.reactive(
-      viewModelBuilder: ()=> LoginViewModel(),
-      builder: (context,model, child)=> BusyOverlayBuilder(
+      viewModelBuilder: () => LoginViewModel(),
+      builder: (context, model, child) => BusyOverlayBuilder(
         busyValue: model.isBusy,
         title: 'Loading',
-              childWhenIdle: SafeArea(
-          child: Scaffold
-          (appBar: AppBar(title: Text('Sign in '),
+        childWhenIdle: SafeArea(
+            child: Scaffold(
+          appBar: AppBar(
+            title: Text('Sign in '),
           ),
-          body: Body(model:model),
-          )),
-      ), 
-      );
+          body: Body(model: model),
+        )),
+      ),
+    );
   }
 }

@@ -15,7 +15,7 @@ import '../../shared/rounded_password_field.dart';
 import '../../shared/goBack.dart';
 import '../../shared/social_card.dart';
 
-class SignupView extends StatelessWidget {
+  class SignupView extends StatelessWidget {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _profileTitleController = TextEditingController();
@@ -40,6 +40,9 @@ class SignupView extends StatelessWidget {
       title: 'Loading',
       childWhenIdle: SafeArea(
         child: Scaffold(
+          appBar: AppBar(
+            title: Text('Sign up'),
+          ),
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,19 +56,14 @@ class SignupView extends StatelessWidget {
                     padding: EdgeInsets.only(top: 5, left: 20.0, right: 20.0),
                     child: Column(
                       children: <Widget>[
-                        SvgPicture.asset(
-                          'assets/icons/signup.svg',
-                          height: size.height * 0.18,
-                        ),
+                    
+                        Image.asset('assets/images/signup.png',
+                        height: 140,),
                         SizedBox(height: 20.0),
-                        // _socialIcons(),
-                        OrDivider(),
+                        
                         _emailTextField(context),
                         _passwordTextField(context),
-                        _fullNameTextField(context),
-                        _toggleButtons(context, model),
-                        // verticalSpaceSmall,
-                        _rofileTitleTextField(context),
+                        
                         verticalSpaceSmall,
                         _disclaimer(context),
                         verticalSpaceSmall,
@@ -115,14 +113,14 @@ class SignupView extends StatelessWidget {
         press: () {
           //todo implement service based navigation
           model.setBusy(true);
-          userData['profileTitle'] = _profileTitleController.text;
-          userData['fullName'] = _fullNameController.text;
-          userData['email'] = _emailController.text;
+          // userData['profileTitle'] = _profileTitleController.text;
+          // userData['fullName'] = _fullNameController.text;
+          // userData['email'] = _emailController.text;
 
           model.signupWithEmil(
             _emailController.text,
             _passwordController.text,
-            userData,
+            // userData,
           );
         },
         text: 'SIGNUP',
@@ -271,7 +269,7 @@ class SignupView extends StatelessWidget {
       child: Text(
           'By Tapping the Sign up  button you are excepting our License Agreement',
           style: Theme.of(context).textTheme.subtitle1.copyWith(
-                color: Theme.of(context).primaryColor,
+                color: Colors.blueGrey,
                 fontStyle: FontStyle.italic,
               )),
     );
