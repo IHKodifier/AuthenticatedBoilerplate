@@ -80,6 +80,11 @@ class AuthenticationService {
   String phoneNumber;
   String verificationId;
   String otp;
+  final PhoneVerificationFailed verificationFailed =
+      (FirebaseAuthException exception) {
+    /// TODO implement this.
+    ConsoleUtility.printToConsole(exception.message);
+  };
 
   /// Google sign In
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -114,14 +119,14 @@ class AuthenticationService {
           'sign in with EMAIL/PASSWORD successfull for $email');
 
       /// see if user has signed in first time after sign up, should receive profile completion invite
-      handleFirstSignIn();
+      // handleFirstSignIn();
 
       // TODO
       // get the user from [AppUsers] collection in firestore
       getAppUserDoc(email);
       //set the logged in user as current user across the app
 
-      initiateRedirects();
+      setRedirectRoutes();
       executeRedirects();
 
       return authResult.user;
@@ -150,19 +155,22 @@ class AuthenticationService {
 
   /// reads the Firestore document from [AppUsers] collection for the [authInstance.currentUser]
   /// and set it to [this.currentAppUser]
+  ///
   Future<DocumentSnapshot> getAppUserDoc(String uid) async {
     DocumentSnapshot documentSnapshot =
         await FirebaseFirestore.instance.collection('/appUsers').doc(uid).get();
     if (documentSnapshot.data() != null) {
       ConsoleUtility.printToConsole(
           'AppUser Doc found for ${documentSnapshot.data().toString()}');
-      currentAppUser = AppUser.fromData(documentSnapshot.data());
+      currentAppUser = AppUser.fromData(documentSnapshot.data(), 'Email');
       ConsoleUtility.printToConsole(
           'Global currentAppUser  variable has been set to ${currentAppUser.toString()}');
+      return documentSnapshot;
     } else {
       ConsoleUtility.printToConsole('AppUser Doc NOT Found');
       isNewAppUser = false;
       currentAppUser = null;
+      return documentSnapshot;
     }
   }
 
@@ -210,18 +218,11 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      if (userCredential.user != null) {
-        ConsoleUtility.printToConsole(
-            ' Firebase User  created in Firebase Auth with user id = \n\n${userCredential.user.uid}');
-        // handleCredentialSuccess();
-        ///email signup is always a new user
-        isNewAppUser = true;
-        setCurrentAppUser(userCredential: userCredential, providerId: 'Email');
-        _firestoreService.createAppUserDoc(appUser: currentAppUser);
-        redirectRoute = routes.ViewProfileViewRoute;
-        // setAppUserDoc(userCredential: userCredential, providerId: 'Email/Password');
-        executeRedirects();
-      }
+      handleCredentialSuccess(
+          userCredential: userCredential, providerId: "Email");
+      // executeRedirects();
+
+      // }
     } catch (e) {
       _dialogService.showDialog(
         title: 'Signup Error',
@@ -284,7 +285,7 @@ class AuthenticationService {
       ConsoleUtility.printToConsole(
           'FirebaseAuth User  UID equals  ${userCredential.user.uid.toString()}');
       isNewAppUser = userCredential.additionalUserInfo.isNewUser;
-      currentAppUser = AppUser.fromFireUser(
+      currentAppUser = AppUser.fromUserCredential(
           userCredential: userCredential,
           providerId: userCredential.additionalUserInfo.providerId);
       // currentAppUser=AppUser.fromFireUser(user: )
@@ -371,12 +372,6 @@ class AuthenticationService {
     ///     codeAutoRetrievalTimeout: autoTimeOut);
   }
 
-  final PhoneVerificationFailed verificationFailed =
-      (FirebaseAuthException exception) {
-    /// TODO implement this.
-    ConsoleUtility.printToConsole(exception.message);
-  };
-
   PhoneVerificationCompleted verificationCompleted(
       PhoneAuthCredential phoneAuthCredential) {
     ConsoleUtility.printToConsole(
@@ -422,25 +417,63 @@ class AuthenticationService {
     return future;
   }
 
-  Future<void> handleCredentialSuccess() {
-    /// check if user has an AppUserDoc in Firestore [/AppUsers]
-  }
+  Future<void> handleCredentialSuccess({
+    UserCredential userCredential,
+    String providerId,
+  }) async {
+    /// this function only gets called when [_authInstance.signInWithCredential] returns
+    /// a [UserCredntial] when loggin in with email/google/fb/phone
 
-  Future<void> handleFirstSignIn() {
+    ConsoleUtility.printToConsole(
+        ' Firebase User  created in Firebase Auth with user id = \n${userCredential.user.uid}\n...........looking for existing AppUserDoc in appUsers collection in firestore........');
 
-    
-  }
-  void initiateRedirects({String routName}) {}
-  void executeRedirects() {
-    if (currentAppUser != null) {
-      _navigationService.popAndPush(redirectRoute);
+    /// check if user has an AppUserDoc in Firestore [appUsers] collection in Firebase
+    final docsnap = await getAppUserDoc(userCredential.user.email);
+    if (docsnap.data() != null) {
+      //user is not signing in for first time
+      //no need to do anything..take him to his home
+      setRedirectRoutes(routeName: routes.HomeViewRoute);
+      ConsoleUtility.printToConsole('AppUserDoc Exists........setting currentAppUser');
+      currentAppUser =
+          AppUser.fromData(docsnap.data(), docsnap.data()['providerId']);
+      executeRedirects();
+    } else {
+      handleFirstSignIn(userCredential, 'Email');
     }
+
+    ///
+  }
+
+  Future<void> handleFirstSignIn(
+      UserCredential userCredential, String providerId) {
+    ///this function handles if the user account has freshly been created and its first ever login since signup
+    ///the user needs to be redirected to Profile view and AppUserDoc needs to be created based on submitted profie data
+
+// redirect to profile View
+    setRedirectRoutes(routeName: routes.ViewProfileViewRoute);
+    currentAppUser = AppUser.fromUserCredential(
+        providerId: providerId, userCredential: userCredential);
+    _firestoreService.createAppUserDoc(appUser: currentAppUser);
+    isNewAppUser = true;
+    executeRedirects();
+  }
+
+  void setRedirectRoutes({String routeName}) {
+    redirectRoute = routeName;
+    ConsoleUtility.printToConsole('redirection set to $redirectRoute');
+  }
+
+  void executeRedirects() {
+    // if (currentAppUser != null) {
+    ConsoleUtility.printToConsole('executing redirect to route $redirectRoute');
+    _navigationService.popAndPush(redirectRoute);
+    // }
   }
 
   void refreshUser() {}
 
   void setCurrentAppUser({UserCredential userCredential, String providerId}) {
-    currentAppUser = AppUser.fromFireUser(
+    currentAppUser = AppUser.fromUserCredential(
         userCredential: userCredential, providerId: providerId);
 
     switch (providerId) {

@@ -24,18 +24,18 @@ class AppUser {
       // this.userRoles,
       this.photoURL});
 
-  AppUser.fromFireUser({UserCredential userCredential, String providerId})
+  AppUser.fromUserCredential({UserCredential userCredential, String providerId})
       : uid = userCredential.user.uid,
-        displayName = userCredential.user.displayName,
+        displayName = userCredential.user.displayName==null? userCredential.user.email:userCredential.user.displayName,
         photoURL = userCredential.user.photoURL == null
             ? _photoURLifBlank
             : userCredential.user.photoURL,
         email = userCredential.user.email,
         providerId = providerId;
 
-  AppUser.fromData(Map<String, dynamic> data)
+  AppUser.fromData(Map<String, dynamic> data,String providerId)
       : uid = data['id'],
-        displayName = data['firstName'],
+        displayName = data['displayName'],
         // lastName = data['lastName'],
         email = data['email'],
         // profileTitle = data['profileTitle'],
@@ -45,7 +45,7 @@ class AppUser {
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
-      'firstName': displayName,
+      'displayName': displayName,
       // 'lastName': lastName,
       'email': email,
       // 'profileTitle': profileTitle,
