@@ -38,6 +38,7 @@ class AppUser {
         displayName = data['displayName'],
         // lastName = data['lastName'],
         email = data['email'],
+        providerId=providerId,
         // profileTitle = data['profileTitle'],
         // userRoles = data['profileType'],
         photoURL = data['photoUrl'];

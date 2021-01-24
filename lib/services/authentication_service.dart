@@ -5,7 +5,7 @@
 /// found in the LICENSE file.
 /// endregion
 
-/// # region imports
+// # region imports
 import 'package:AuthenticatedBoilerPlate/app/service_locator.dart';
 import 'package:AuthenticatedBoilerPlate/services/console_utility.dart';
 import 'package:AuthenticatedBoilerPlate/services/dialog_service.dart';
@@ -22,19 +22,20 @@ import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 
-/// endregion
+// endregion
 
 /// # region ClassInfo
-/// final String className='AuthenticationService'
-/// final String _version = '1.0.0';
-/// final String _packageName = 'AuthenticatedBoilerPlate';
+final String className = 'AuthenticationService';
+final String _version = '1.0.0';
+final String _packageName = 'AuthenticatedBoilerPlate';
+
 /// endregion
 
-/// this class wraps all the functionality required by an App to authenticate its users.
-/// Singleton instance of this class is available across the  App  and get can be refernced by
-/// instantiating an [[AuthenticationService]] via call to serviceLocator. syntax below
+/// this class wraps all the functionality required by an App to authenticate its users. /// Singleton instance
+///  of this class is available across the  App  and get can be refernced by  instantiating an [[AuthenticationService]]
+///  via call to serviceLocator. syntax below
 
-/// final AuthenticationService _authService =serviceLocator<AuthenticationService>();
+///            final AuthenticationService _authService =serviceLocator<AuthenticationService>();
 
 /// Uses signupWithEmail(...),signInWithGoogle(),signInWithFacebook(),  signInWithTwitter(),signInWithPhoneNumber(...),
 /// loginWithEmail(...),
@@ -47,12 +48,10 @@ class AuthenticationService {
   final NavigationService _navigationService =
       serviceLocator<NavigationService>();
 
-  /// Data members
-
+  /// Field
   FirebaseAuth get authInstance => _authInstance;
 
-  /// The App-wide Global currently authenticated [AppUser]
-  /// if no user is logged in  this wil always be null
+  /// The App-wide Global currently authenticated [AppUser] if no user is logged in  this wil always be null
   AppUser currentAppUser = null;
 
   ///  Holds the appropriate redirect route to navigate to
@@ -62,13 +61,11 @@ class AuthenticationService {
   String _photoURLifBlank =
       'https://st4.depositphotos.com/15973376/24173/v/950/depositphotos_241732228-stock-illustration-user-account-circular-line-icon.jpg';
 
-  ///
-
   ///  sets flag to display provider bage on View Profile
   bool isNewAppUser = false;
 
-  ///  the defaultRole selected for [currentAppUser] at the time of login
-  ///  if it has more than 1 roles assigned i.e.  [getAllRolesForUser.length] >1
+  ///  the defaultRole selected for [currentAppUser] at the time of login  if it has more than 1 roles assigned i.e. if
+  /// getAllRolesForUser.length] >1
   String defaultRole = 'DefaultRole';
 
   ///  FaceBook Sign In
@@ -92,8 +89,7 @@ class AuthenticationService {
   GoogleSignInAuthentication googleSignInAuthentication;
   AuthCredential authCredential;
 
-  /// attempts to sign in the user with EMAIL/PASSWORD
-  ///  returns [True] if success or otherwise [False]
+  /// attempts to sign in the user with EMAIL/PASSWORD returns [True] if success or otherwise [False]
   Future<dynamic> loginWithEmail({
     @required String email,
     @required String password,
@@ -123,7 +119,7 @@ class AuthenticationService {
 
       // TODO
       // get the user from [AppUsers] collection in firestore
-      getAppUserDoc(email);
+      _getAppUserDoc(email, 'Email');
       //set the logged in user as current user across the app
 
       setRedirectRoutes();
@@ -136,74 +132,38 @@ class AuthenticationService {
     }
   }
 
-  /// returns a list of Strings for all user-Roles assigned to current user
-  /// returns 'DefaultRole' if no speicic role is set.
-  List<String> getAllRolesForUser() {
-    // TODO
-    // List<String> roles;
-    // if (currentAppUser != null) {
-    //      if (currentUserProfile['userRoles'].toString().contains(',')) {
-    //        roles = currentUserProfile['userRoles'].toString().split(',');
-    //      } else {
-    //        roles = [currentUserProfile['userRoles'].toString()];
-    //      }
-    //      return roles;
-    //    } else {
-    //      throw Exception('defaultRole for user has not been set');
-    // }
-  }
-
   /// reads the Firestore document from [AppUsers] collection for the [authInstance.currentUser]
-  /// and set it to [this.currentAppUser]
+  /// and set it to [currentAppUser]
   ///
-  Future<DocumentSnapshot> getAppUserDoc(String uid) async {
+  Future<DocumentSnapshot> _getAppUserDoc(String uid, String providerId) async {
     DocumentSnapshot documentSnapshot =
         await FirebaseFirestore.instance.collection('/appUsers').doc(uid).get();
     if (documentSnapshot.data() != null) {
       ConsoleUtility.printToConsole(
           'AppUser Doc found for ${documentSnapshot.data().toString()}');
-      currentAppUser = AppUser.fromData(documentSnapshot.data(), 'Email');
+      currentAppUser = AppUser.fromData(documentSnapshot.data(), providerId);
       ConsoleUtility.printToConsole(
           'Global currentAppUser  variable has been set to ${currentAppUser.toString()}');
       return documentSnapshot;
     } else {
       ConsoleUtility.printToConsole('AppUser Doc NOT Found');
-      isNewAppUser = false;
-      currentAppUser = null;
+      // isNewAppUser = false;
+      // currentAppUser = null;
       return documentSnapshot;
     }
   }
 
-  setAuthenticatedUser(String uid) async {
-    // try {
-    //      var returnvalue = await getUserProfile(uid);
-    //      if (returnvalue.data != null) {
-    //        currentUserProfile = returnvalue.data;
-    //        ConsoleUtility.printToConsole(currentUserProfile.toString());
-    //        var roles = getAllRolesForUser();
-    //        defaultRole = roles[0];
-    //        ConsoleUtility.printToConsole(
-    //            'defaultRole  is now set to " $defaultRole"');
-    //      } else {
-    //        // throw Exception('default user not set');
-    //      }
-    // } catch (e) {
-    //   _dialogService.showDialog(title: e.message);
-    // }
-  }
-
   /// checks if a user is already Signed In  on this device. this property is required  by startup Authentication logic
   Future<bool> isUserLoggedIn() async {
-    var user = await FirebaseAuth.instance.currentUser;
+    var user =  FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await setAuthenticatedUser(user.uid);
+      // await setAuthenticatedUser(user.uid);
 
-      ConsoleUtility.printToConsole(
-          'ALREADY logged in user detected.\n returning ${user == null}');
+      ConsoleUtility.printToConsole('ALREADY logged in user detected.');
       return true;
     }
     ConsoleUtility.printToConsole(
-        'NO already logged in user detected.\n returning ${user != null}');
+        'NO \n already\n logged in \n user \n detected');
     return false;
   }
 
@@ -220,37 +180,25 @@ class AuthenticationService {
       );
       handleCredentialSuccess(
           userCredential: userCredential, providerId: "Email");
-      // executeRedirects();
-
-      // }
     } catch (e) {
       _dialogService.showDialog(
         title: 'Signup Error',
         description: e.message.toString(),
       );
       ConsoleUtility.printToConsole(
-          ' authentication service\n signupWithEmail\n ihk caught an exception \n${e.message}');
+          ' authentication service caught an exception \n${e.message}');
     }
   }
 
   Future signout() async {
     try {
       await _authInstance.signOut();
-      ConsoleUtility.printToConsole('logged out of FireBase');
       currentAppUser = null;
-      ConsoleUtility.printToConsole('CurrentAppUser has been reset to null');
+      ConsoleUtility.printToConsole(
+          'Succesfully logged out of FireBase\n CurrentAppUser has been reset to null');
     } catch (e) {
       ConsoleUtility.printToConsole(e.message);
     }
-  }
-
-  ///create all user profile data here to save to [appUsers] collection
-  _buildUserProfileMap(UserCredential userCredential, var userProfileData) {
-    // userProfileData['email'] = userCredential.user.email;
-    // userProfileData['uid'] = userCredential.user.uid;
-    // userProfileData['creeatedBy'] = 'debugAdmin';
-    // userProfileData['version'] = 'ViewModelBuiler2.2';
-    // userProfileData['photoUrl'] = 'http:///i.pravatar.cc/300';
   }
 
   Future signInWithGoogle() async {
@@ -272,45 +220,16 @@ class AuthenticationService {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken);
     ConsoleUtility.printToConsole(
-        'Google successfully authenticated your account');
-    ConsoleUtility.printToConsole(
-        'attempting to login ${googleSignInAccount.email} with Firebase');
+        'Google Identity Provider has successfully authenticated your selected account\n we will now attempt to login ${googleSignInAccount.email} with with this app');
+
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(authCredential);
 
     if (userCredential.user != null) {
-      /// sign in with firebase successfull
-      ConsoleUtility.printToConsole(
-          '${googleSignInAccount.email} successfully authenticated with Firebase ');
-      ConsoleUtility.printToConsole(
-          'FirebaseAuth User  UID equals  ${userCredential.user.uid.toString()}');
-      isNewAppUser = userCredential.additionalUserInfo.isNewUser;
-      currentAppUser = AppUser.fromUserCredential(
+      handleCredentialSuccess(
           userCredential: userCredential,
           providerId: userCredential.additionalUserInfo.providerId);
-      // currentAppUser=AppUser.fromFireUser(user: )
-
-      if (userCredential.additionalUserInfo.isNewUser) {
-        ///  save [AppUser] to firestore
-        ConsoleUtility.printToConsole(
-            'creating AppUser for the user in Firestore');
-
-        await FirestoreService().createAppUserDoc(
-          appUser: currentAppUser,
-        );
-
-        /// Navigate to Edit Profile View
-        _navigationService.navigateTo(routes.ViewProfileViewRoute);
-      } else {
-        ConsoleUtility.printToConsole(
-            'System detected that you are  \n NOT \n a new user.....\n you will be directed to Home View');
-
-        /// Navigate to Home View
-        /// _navigationService.navigateTo(routes.HomeViewRoute);
-        /// TODO: read  returning user from appUsers and set to current AppUser
-        ///
-      }
-    } else {}
+    }
   }
 
   Future signInWithFacebook() async {
@@ -335,14 +254,13 @@ class AuthenticationService {
         /// attempt login with Firebase
         ConsoleUtility.printToConsole(
             'attempting to login facebook user with Firebase');
-        final authResult =
+        final userCredential =
             await _authInstance.signInWithCredential(fbAuthCredential);
         ConsoleUtility.printToConsole(
-            '${authResult.user.displayName} has been logged into Firebase with facebook using email ${authResult.user.email}');
-        ConsoleUtility.printToConsole(
-            'checking newuser=${authResult.additionalUserInfo.isNewUser.toString()}');
-
-        /// authResult.additionalUserInfo.isNewUser;
+            '${userCredential.user.displayName} has been logged into Firebase with facebook using email ${userCredential.user.email}');
+        handleCredentialSuccess(
+            userCredential: userCredential,
+            providerId: userCredential.additionalUserInfo.providerId);
 
         break;
       case FacebookLoginStatus.cancel:
@@ -352,24 +270,6 @@ class AuthenticationService {
 
       default:
     }
-  }
-
-  Future signInWithTwitter() {
-    ConsoleUtility.printToConsole('Attempting Twitter Sign in ');
-  }
-
-  Future<void> signInWithPhoneNumber(String phoneNumber) async {
-    this.phoneNumber = phoneNumber;
-    ConsoleUtility.printToConsole(
-        'Authentication Service Attempting Phone Number Sign in with \t ${this.phoneNumber} ');
-
-    /// await _authInstance.verifyPhoneNumber(
-    ///     phoneNumber: this.phoneNumber,
-    ///     timeout: Duration(seconds: 20),
-    ///     verificationCompleted: verificationCompleted,
-    ///     verificationFailed: verificationFailed,
-    ///     codeSent: handleCodeSent,-r
-    ///     codeAutoRetrievalTimeout: autoTimeOut);
   }
 
   PhoneVerificationCompleted verificationCompleted(
@@ -397,6 +297,10 @@ class AuthenticationService {
     this.verificationId = verId;
   }
 
+  onPhoneSignInError() {
+    ConsoleUtility.printToConsole('some phone sign in error occured');
+  }
+
   signInWithPhoneCredential(String otp) {
     final credential = PhoneAuthProvider.credential(
         verificationId: this.verificationId, smsCode: otp);
@@ -407,14 +311,34 @@ class AuthenticationService {
     }).catchError(onPhoneSignInError);
   }
 
-  onPhoneSignInError() {
-    ConsoleUtility.printToConsole('some phone sign in error occured');
+  void setRedirectRoutes({String routeName}) {
+    redirectRoute = routeName;
+    ConsoleUtility.printToConsole('redirection set to $redirectRoute');
   }
 
-  Future<UserCredential> signInWithCredential(UserCredential credential) async {
-    var future =
-        await _authInstance.signInWithCredential(credential as AuthCredential);
-    return future;
+  void executeRedirects() {
+    // if (currentAppUser != null) {
+    ConsoleUtility.printToConsole('executing redirect to route $redirectRoute');
+    _navigationService.popAndPush(redirectRoute);
+    // }
+  }
+
+  Future<void> handleFirstSignIn(
+      UserCredential userCredential, String providerId) {
+
+    ///this function handles if the user account has freshly been created and its first ever login since signup
+    ///the user needs to be redirected to Profile view and AppUserDoc needs to be created based on submitted profie data
+
+// redirect to profile View
+    setRedirectRoutes(routeName: routes.ViewProfileViewRoute);
+    currentAppUser = AppUser.fromUserCredential(
+        providerId: providerId, 
+        userCredential: userCredential);
+
+
+    _firestoreService.createAppUserDoc(appUser: currentAppUser);
+    isNewAppUser = true;
+    executeRedirects();
   }
 
   Future<void> handleCredentialSuccess({
@@ -428,46 +352,19 @@ class AuthenticationService {
         ' Firebase User  created in Firebase Auth with user id = \n${userCredential.user.uid}\n...........looking for existing AppUserDoc in appUsers collection in firestore........');
 
     /// check if user has an AppUserDoc in Firestore [appUsers] collection in Firebase
-    final docsnap = await getAppUserDoc(userCredential.user.email);
-    if (docsnap.data() != null) {
-      //user is not signing in for first time
-      //no need to do anything..take him to his home
-      setRedirectRoutes(routeName: routes.HomeViewRoute);
-      ConsoleUtility.printToConsole('AppUserDoc Exists........setting currentAppUser');
-      currentAppUser =
-          AppUser.fromData(docsnap.data(), docsnap.data()['providerId']);
-      executeRedirects();
+    final docsnap = await _getAppUserDoc(userCredential.user.email, providerId);
+    if (docsnap.exists) {
+        //user is not signing in for first time
+        //no need to do anything..take him to his home
+        setRedirectRoutes(routeName: routes.HomeViewRoute);
+        ConsoleUtility.printToConsole(
+            'AppUserDoc Exists........setting currentAppUser');
+        currentAppUser =
+            AppUser.fromData(docsnap.data(), docsnap.data()['providerId']);
+        executeRedirects();
     } else {
-      handleFirstSignIn(userCredential, 'Email');
+      handleFirstSignIn(userCredential, providerId);
     }
-
-    ///
-  }
-
-  Future<void> handleFirstSignIn(
-      UserCredential userCredential, String providerId) {
-    ///this function handles if the user account has freshly been created and its first ever login since signup
-    ///the user needs to be redirected to Profile view and AppUserDoc needs to be created based on submitted profie data
-
-// redirect to profile View
-    setRedirectRoutes(routeName: routes.ViewProfileViewRoute);
-    currentAppUser = AppUser.fromUserCredential(
-        providerId: providerId, userCredential: userCredential);
-    _firestoreService.createAppUserDoc(appUser: currentAppUser);
-    isNewAppUser = true;
-    executeRedirects();
-  }
-
-  void setRedirectRoutes({String routeName}) {
-    redirectRoute = routeName;
-    ConsoleUtility.printToConsole('redirection set to $redirectRoute');
-  }
-
-  void executeRedirects() {
-    // if (currentAppUser != null) {
-    ConsoleUtility.printToConsole('executing redirect to route $redirectRoute');
-    _navigationService.popAndPush(redirectRoute);
-    // }
   }
 
   void refreshUser() {}
@@ -486,7 +383,52 @@ class AuthenticationService {
       // case
       default:
     }
-
-    // FirestoreService.
   }
+
+  ///PARKED FOR FUTURE
+
+  /// returns a list of Strings for all user-Roles assigned to current user
+  /// returns 'DefaultRole' if no speicic role is set.
+  List<String> getAllRolesForUser() {
+    // TODO
+    // List<String> roles;
+    // if (currentAppUser != null) {
+    //      if (currentUserProfile['userRoles'].toString().contains(',')) {
+    //        roles = currentUserProfile['userRoles'].toString().split(',');
+    //      } else {
+    //        roles = [currentUserProfile['userRoles'].toString()];
+    //      }
+    //      return roles;
+    //    } else {
+    //      throw Exception('defaultRole for user has not been set');
+    // }
+  }
+
+//create all user profile data here to save to [appUsers] collection
+  _buildUserProfileMap(UserCredential userCredential, var userProfileData) {
+    // userProfileData['email'] = userCredential.user.email;
+    // userProfileData['uid'] = userCredential.user.uid;
+    // userProfileData['creeatedBy'] = 'debugAdmin';
+    // userProfileData['version'] = 'ViewModelBuiler2.2';
+    // userProfileData['photoUrl'] = 'http:///i.pravatar.cc/300';
+  }
+
+  // Future signInWithTwitter() {
+  //   ConsoleUtility.printToConsole('Attempting Twitter Sign in ');
+  // }
+
+  // Future<void> signInWithPhoneNumber(String phoneNumber) async {
+  //   this.phoneNumber = phoneNumber;
+  //   ConsoleUtility.printToConsole(
+  //       'Authentication Service Attempting Phone Number Sign in with \t ${this.phoneNumber} ');
+
+  //   /// await _authInstance.verifyPhoneNumber(
+  //   ///     phoneNumber: this.phoneNumber,
+  //   ///     timeout: Duration(seconds: 20),
+  //   ///     verificationCompleted: verificationCompleted,
+  //   ///     verificationFailed: verificationFailed,
+  //   ///     codeSent: handleCodeSent,-r
+  //   ///     codeAutoRetrievalTimeout: autoTimeOut);
+  // }
+
 }
