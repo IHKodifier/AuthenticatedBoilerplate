@@ -9,7 +9,7 @@ String _photoURLifBlank =
 class AppUser {
   final String uid;
   final String email;
-   String displayName;
+  String displayName;
   // final String lastName;
   // final String userRoles;
   String photoURL;
@@ -26,19 +26,26 @@ class AppUser {
 
   AppUser.fromUserCredential({UserCredential userCredential, String providerId})
       : uid = userCredential.user.uid,
-        displayName = userCredential.user.displayName==null? userCredential.user.email:userCredential.user.displayName,
+        //email is null for phone users
+        email = userCredential.user.email == null
+            ? 'AppUser${userCredential.user.phoneNumber}@AppUser.com'
+            : userCredential.user.email,
+            //displayname is also null for phone users
+        displayName = userCredential.user.displayName == null
+            ? 'AppUser=${userCredential.user.phoneNumber}'
+            : userCredential.user.displayName,
+            //photoURL is null for both email and phone users
         photoURL = userCredential.user.photoURL == null
             ? _photoURLifBlank
             : userCredential.user.photoURL,
-        email = userCredential.user.email,
         providerId = providerId;
 
-  AppUser.fromData(Map<String, dynamic> data,String providerId)
+  AppUser.fromData(Map<String, dynamic> data, String providerId)
       : uid = data['id'],
         displayName = data['displayName'],
         // lastName = data['lastName'],
         email = data['email'],
-        providerId=providerId,
+        providerId = providerId,
         // profileTitle = data['profileTitle'],
         // userRoles = data['profileType'],
         photoURL = data['photoUrl'];

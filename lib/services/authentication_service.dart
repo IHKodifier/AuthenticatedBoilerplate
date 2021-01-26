@@ -155,7 +155,7 @@ class AuthenticationService {
 
   /// checks if a user is already Signed In  on this device. this property is required  by startup Authentication logic
   Future<bool> isUserLoggedIn() async {
-    var user =  FirebaseAuth.instance.currentUser;
+    var user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       // await setAuthenticatedUser(user.uid);
 
@@ -170,7 +170,6 @@ class AuthenticationService {
   Future<dynamic> signupWithEmail({
     @required String email,
     @required String password,
-    // @required var userData,
   }) async {
     UserCredential userCredential;
     try {
@@ -285,19 +284,19 @@ class AuthenticationService {
     /// phoneAuthCredential.
   }
 
-  handleCodeSent(String verId, [int forceCodeResend]) {
+  _handleCodeSent(String verId, [int forceCodeResend]) {
     ConsoleUtility.printToConsole('you otp has been sent ');
 
     this.verificationId = verId;
   }
 
-  PhoneCodeAutoRetrievalTimeout autoTimeOut(String verId) {
+  PhoneCodeAutoRetrievalTimeout _autoTimeOut(String verId) {
     ConsoleUtility.printToConsole('Auto validation of OTP has did not succeed');
 
     this.verificationId = verId;
   }
 
-  onPhoneSignInError() {
+  _onPhoneSignInError() {
     ConsoleUtility.printToConsole('some phone sign in error occured');
   }
 
@@ -308,7 +307,7 @@ class AuthenticationService {
       ConsoleUtility.printToConsole('otp verfied. \n you will be logged in ');
       ConsoleUtility.printToConsole(
           'instance  wide current user is  ${(_authInstance.currentUser != null).toString()} ');
-    }).catchError(onPhoneSignInError);
+    }).catchError(_onPhoneSignInError);
   }
 
   void setRedirectRoutes({String routeName}) {
@@ -325,16 +324,15 @@ class AuthenticationService {
 
   Future<void> handleFirstSignIn(
       UserCredential userCredential, String providerId) {
-
     ///this function handles if the user account has freshly been created and its first ever login since signup
     ///the user needs to be redirected to Profile view and AppUserDoc needs to be created based on submitted profie data
 
 // redirect to profile View
     setRedirectRoutes(routeName: routes.ViewProfileViewRoute);
     currentAppUser = AppUser.fromUserCredential(
-        providerId: providerId, 
-        userCredential: userCredential);
-
+      userCredential: userCredential,
+      providerId: providerId,
+    );
 
     _firestoreService.createAppUserDoc(appUser: currentAppUser);
     isNewAppUser = true;
@@ -354,14 +352,14 @@ class AuthenticationService {
     /// check if user has an AppUserDoc in Firestore [appUsers] collection in Firebase
     final docsnap = await _getAppUserDoc(userCredential.user.email, providerId);
     if (docsnap.exists) {
-        //user is not signing in for first time
-        //no need to do anything..take him to his home
-        setRedirectRoutes(routeName: routes.HomeViewRoute);
-        ConsoleUtility.printToConsole(
-            'AppUserDoc Exists........setting currentAppUser');
-        currentAppUser =
-            AppUser.fromData(docsnap.data(), docsnap.data()['providerId']);
-        executeRedirects();
+      //user is not signing in for first time
+      //no need to do anything..take him to his home
+      setRedirectRoutes(routeName: routes.HomeViewRoute);
+      ConsoleUtility.printToConsole(
+          'AppUserDoc Exists........setting currentAppUser');
+      currentAppUser =
+          AppUser.fromData(docsnap.data(), docsnap.data()['providerId']);
+      executeRedirects();
     } else {
       handleFirstSignIn(userCredential, providerId);
     }
@@ -385,7 +383,7 @@ class AuthenticationService {
     }
   }
 
-  ///PARKED FOR FUTURE
+  ///                                     PARKED FOR FUTURE
 
   /// returns a list of Strings for all user-Roles assigned to current user
   /// returns 'DefaultRole' if no speicic role is set.
@@ -412,23 +410,4 @@ class AuthenticationService {
     // userProfileData['version'] = 'ViewModelBuiler2.2';
     // userProfileData['photoUrl'] = 'http:///i.pravatar.cc/300';
   }
-
-  // Future signInWithTwitter() {
-  //   ConsoleUtility.printToConsole('Attempting Twitter Sign in ');
-  // }
-
-  // Future<void> signInWithPhoneNumber(String phoneNumber) async {
-  //   this.phoneNumber = phoneNumber;
-  //   ConsoleUtility.printToConsole(
-  //       'Authentication Service Attempting Phone Number Sign in with \t ${this.phoneNumber} ');
-
-  //   /// await _authInstance.verifyPhoneNumber(
-  //   ///     phoneNumber: this.phoneNumber,
-  //   ///     timeout: Duration(seconds: 20),
-  //   ///     verificationCompleted: verificationCompleted,
-  //   ///     verificationFailed: verificationFailed,
-  //   ///     codeSent: handleCodeSent,-r
-  //   ///     codeAutoRetrievalTimeout: autoTimeOut);
-  // }
-
 }

@@ -15,6 +15,7 @@ class PhoneSignupViewModel extends BaseModel {
 
   DialogService _dialogService = serviceLocator<DialogService>();
   NavigationService _navigationService = serviceLocator<NavigationService>();
+  AuthenticationService get authService => _authService;
   String phoneNumber;
   String verificationId;
   String otp;
@@ -28,33 +29,34 @@ class PhoneSignupViewModel extends BaseModel {
     await _authService.authInstance.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         timeout: Duration(seconds: 3),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationFailed,
-        codeSent: handleCodeSent,
-        codeAutoRetrievalTimeout: autoTimeOut);
+        verificationCompleted: _verificationCompleted,
+        verificationFailed: _verificationFailed,
+        codeSent: _handleCodeSent,
+        codeAutoRetrievalTimeout: _autoTimeOut);
   }
 
-  void verificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+  void _verificationCompleted(PhoneAuthCredential phoneAuthCredential) {
     ConsoleUtility.printToConsole(
         // TODO
         'looks like phone verifiction met success\n this is the auth credential\n${phoneAuthCredential.toString()}');
     setBusy(false);
-    // _authService.s
     _authService.authInstance
         .signInWithCredential(phoneAuthCredential)
         .then((value) {
-      if (value.user != null)
-        _navigationService.navigateTo(routes.HomeViewRoute);
+      // if (value.user != null)
+      //   _navigationService.navigateTo(routes.HomeViewRoute);
+      _authService.handleCredentialSuccess(
+          userCredential: value, providerId: 'Phone');
     });
   }
 
-  handleCodeSent(String verId, [int forceCodeResend]) {
+  _handleCodeSent(String verId, [int forceCodeResend]) {
     ConsoleUtility.printToConsole('you otp has been sent ');
     this.verificationId = verId;
     notifyListeners();
   }
 
-  verificationFailed(FirebaseAuthException exception) {
+  _verificationFailed(FirebaseAuthException exception) {
     setBusy(false);
     // TODO implement this.
     _dialogService.showDialog(
@@ -62,7 +64,7 @@ class PhoneSignupViewModel extends BaseModel {
     ConsoleUtility.printToConsole(exception.message);
   }
 
-  PhoneCodeAutoRetrievalTimeout autoTimeOut(String verId) {
+  PhoneCodeAutoRetrievalTimeout _autoTimeOut(String verId) {
     ConsoleUtility.printToConsole('Auto validation of OTP has did not succeed');
 
     this.verificationId = verId;

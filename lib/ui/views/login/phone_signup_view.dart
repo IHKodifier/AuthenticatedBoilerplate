@@ -72,14 +72,14 @@ class PhoneSignupView extends StatelessWidget {
                     height: 10,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * .4,
+                    width: MediaQuery.of(context).size.width * .6,
                     child: RaisedButton(
                       onPressed: () {
                         model.verifyPhone(this.phoneNumber);
                       },
                       color: Theme.of(context).primaryColor,
                       child: Text(
-                        'Verify Phone',
+                        'Sign Up with Phone',
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1
@@ -90,29 +90,21 @@ class PhoneSignupView extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Text(
                         '1==>\t\t\t We will send a 6 digit code on above Phone Number to verify your access to  above phone ',
                         style: Theme.of(context).textTheme.caption),
                   ),
-                  //  Padding(
-                  //    padding: const EdgeInsets.all(16),
-                  //    child: Text('2==>\t\t\t We will try to auto validate the code if number is active on this device',
-                  //    style: Theme.of(context).textTheme.caption),
-                  //  ),
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Text(
-                        '2==>\t\t\t If Auto validation fails, enter the 6 Digit code below and press subit',
+                        '2==>\t\t\t Once received, enter the 6 Digit code below and press subit',
                         style: Theme.of(context).textTheme.caption),
                   ),
-
                   SizedBox(
                     height: 10,
                   ),
-
                   smsTextField(model, context),
                   SizedBox(
                     height: 10,
@@ -126,16 +118,20 @@ class PhoneSignupView extends StatelessWidget {
                           .copyWith(color: Colors.white),
                     ),
                     color: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      // dialogService.
-                      model.notifyListeners();
+                    onPressed: () async {
                       ConsoleUtility.printToConsole(
                           'the OTP enetered was ${model.otp}');
                       AuthCredential authCredential =
                           PhoneAuthProvider.credential(
                               verificationId: model.verificationId,
                               smsCode: model.otp);
-                      model.signInWithCredential(authCredential);
+                      // model.signInWithCredential(authCredential);
+                      final UserCredential userCredential = await model
+                          .authInstace
+                          .signInWithCredential(authCredential);
+                      model.authService.handleCredentialSuccess(
+                          userCredential: userCredential,
+                          providerId: 'Phone');
                     },
                   ),
                 ],
