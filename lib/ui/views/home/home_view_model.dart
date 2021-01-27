@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeViewModel extends BaseModel {
   AuthenticationService _authService = serviceLocator<AuthenticationService>();
-
+  AuthenticationService get authService => _authService;
   DialogService _dialogService = serviceLocator<DialogService>();
   NavigationService _navigationService = serviceLocator<NavigationService>();
 

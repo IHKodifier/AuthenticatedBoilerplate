@@ -147,8 +147,8 @@ class AuthenticationService {
       return documentSnapshot;
     } else {
       ConsoleUtility.printToConsole('AppUser Doc NOT Found');
-      // isNewAppUser = false;
-      // currentAppUser = null;
+      isNewAppUser = false;
+      currentAppUser = null;
       return documentSnapshot;
     }
   }

@@ -19,6 +19,7 @@ class HomeView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(model.authService.currentAppUser.toPrint()),
               RaisedButton(
                 onPressed: () {
                   model.signOut();
